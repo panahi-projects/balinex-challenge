@@ -40,10 +40,18 @@ const Navbar = () => {
   ];
   return (
     <nav>
-      <ul className="flex flex-row items-center justify-between gap-12">
+      <ul className="flex flex-col lg:flex-row items-start lg:items-center justify-start lg:justify-between gap-4 lg:gap-12">
         {links.map((link) => (
-          <li key={link.id} className="text-primary-800 text-sm">
-            <Link href={link.href}>{link.label}</Link>
+          <li
+            key={link.id}
+            className="text-primary-800 text-sm hover:text-primary-600 transition-colors"
+          >
+            <Link
+              href={link.href}
+              className="block py-2 lg:py-0 hover:underline"
+            >
+              {link.label}
+            </Link>
           </li>
         ))}
       </ul>
