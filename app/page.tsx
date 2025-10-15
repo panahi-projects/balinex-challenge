@@ -1,7 +1,9 @@
+import { CryptoTable } from "@/features";
+
 export default function Home() {
   return (
-    <main className="text-primary">
-      Balinex technical challenge is about to start...
-    </main>
+    <div className="container text-primary my-4">
+      <CryptoTable />
+    </div>
   );
 }
