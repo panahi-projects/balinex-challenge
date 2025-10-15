@@ -1,3 +1,7 @@
 export default function Home() {
-  return <main>Balinex technical challenge is about to start...</main>;
+  return (
+    <main className="bg-white text-primary">
+      Balinex technical challenge is about to start...
+    </main>
+  );
 }
