@@ -26,6 +26,11 @@ export interface ActionButton<T = any> {
   size?: "small" | "medium" | "large";
   disabled?: (record: T) => boolean;
   icon?: React.ReactNode;
+  responsive?: {
+    mobile?: boolean;
+    tablet?: boolean;
+    desktop?: boolean;
+  };
 }
 
 export interface DataTableProps<T = any> {
@@ -167,7 +172,7 @@ const DataTable = <T extends Record<string, any>>({
     );
   }
 
-  // Helper function to get responsive classes
+  // Helper function to get responsive classes for columns
   const getResponsiveClasses = (column: Column<T>) => {
     const { responsive } = column;
     if (!responsive) return ""; // Show by default on all screens
@@ -205,6 +210,119 @@ const DataTable = <T extends Record<string, any>>({
     return classes.join(" ");
   };
 
+  // Helper function to get responsive classes for action buttons
+  const getActionResponsiveClasses = (action: ActionButton<T>) => {
+    const { responsive } = action;
+    if (!responsive) return ""; // Show by default on all screens
+
+    const classes = [];
+
+    // Start with base visibility
+    if (responsive.mobile === false) {
+      classes.push("hidden");
+    } else {
+      classes.push("block");
+    }
+
+    // Override for tablet (md: breakpoint)
+    if (responsive.tablet !== undefined) {
+      if (responsive.tablet === false) {
+        classes.push("md:hidden");
+      } else {
+        classes.push("md:block");
+      }
+    }
+
+    // Override for desktop (lg: breakpoint)
+    if (responsive.desktop !== undefined) {
+      if (responsive.desktop === false) {
+        classes.push("lg:hidden");
+      } else {
+        classes.push("lg:block");
+      }
+    }
+
+    return classes.join(" ");
+  };
+
+  // Helper function to check if action column should be visible
+  const shouldShowActionColumn = () => {
+    if (actions.length === 0) return false;
+
+    // If any action has responsive settings, check if at least one is visible on any screen
+    const hasResponsiveActions = actions.some((action) => action.responsive);
+
+    if (!hasResponsiveActions) return true; // Show by default if no responsive settings
+
+    // Check if at least one action is visible on any screen size
+    return actions.some((action) => {
+      const { responsive } = action;
+      if (!responsive) return true; // Show by default
+
+      // Check if action is visible on at least one screen size
+      return (
+        responsive.mobile !== false ||
+        responsive.tablet !== false ||
+        responsive.desktop !== false
+      );
+    });
+  };
+
+  // Helper function to get responsive classes for action column
+  const getActionColumnResponsiveClasses = () => {
+    if (actions.length === 0) return "hidden";
+
+    // If no responsive settings, show on all screens
+    const hasResponsiveActions = actions.some((action) => action.responsive);
+    if (!hasResponsiveActions) return "";
+
+    // Check if any action is visible on mobile
+    const hasVisibleOnMobile = actions.some((action) => {
+      const { responsive } = action;
+      if (!responsive) return true;
+      return responsive.mobile !== false;
+    });
+
+    // Check if any action is visible on tablet
+    const hasVisibleOnTablet = actions.some((action) => {
+      const { responsive } = action;
+      if (!responsive) return true;
+      return responsive.tablet !== false;
+    });
+
+    // Check if any action is visible on desktop
+    const hasVisibleOnDesktop = actions.some((action) => {
+      const { responsive } = action;
+      if (!responsive) return true;
+      return responsive.desktop !== false;
+    });
+
+    const classes = [];
+
+    // Mobile visibility
+    if (!hasVisibleOnMobile) {
+      classes.push("hidden");
+    } else {
+      classes.push("block");
+    }
+
+    // Tablet visibility
+    if (hasVisibleOnTablet) {
+      classes.push("md:block");
+    } else {
+      classes.push("md:hidden");
+    }
+
+    // Desktop visibility
+    if (hasVisibleOnDesktop) {
+      classes.push("lg:block");
+    } else {
+      classes.push("lg:hidden");
+    }
+
+    return classes.join(" ");
+  };
+
   // Get visible columns based on responsive settings
   const getVisibleColumns = () => {
     return columns.filter((column) => {
@@ -220,10 +338,10 @@ const DataTable = <T extends Record<string, any>>({
   const visibleColumns = getVisibleColumns();
 
   return (
-    <div className={className}>
+    <div className={`overflow-hidden ${className}`}>
       {/* Header */}
       <div className="bg-background-50 border-b border-gray-200 rounded-t-lg">
-        <div className="flex items-center overflow-x-auto justify-between">
+        <div className="flex items-center justify-between">
           {selectable && (
             <div className="px-4 py-3 w-12 flex-shrink-0">
               <input
@@ -237,11 +355,14 @@ const DataTable = <T extends Record<string, any>>({
           {visibleColumns.map((column) => (
             <div
               key={column.key}
-              className={`px-4 py-3 font-medium text-text-200 whitespace-nowrap flex-shrink-0  ${getResponsiveClasses(column)}`}
+              className={`px-4 py-3 font-medium text-text-200 flex-shrink-0 ${getResponsiveClasses(column)}`}
               style={{
                 width: column.width || "auto",
                 minWidth: column.minWidth || column.width || "120px",
                 textAlign: column.align || "right",
+                wordBreak: "break-word",
+                overflowWrap: "break-word",
+                maxWidth: "100%",
               }}
             >
               <div className="flex items-center gap-2">
@@ -261,8 +382,10 @@ const DataTable = <T extends Record<string, any>>({
               </div>
             </div>
           ))}
-          {actions.length > 0 && (
-            <div className="px-4 py-3 text-center font-medium text-text-700 flex-shrink-0 min-w-[120px]">
+          {shouldShowActionColumn() && (
+            <div
+              className={`px-4 py-3 text-center font-medium text-text-700 flex-shrink-0 min-w-[120px] max-w-[200px] ${getActionColumnResponsiveClasses()}`}
+            >
               {actionColumnTitle}
             </div>
           )}
@@ -279,7 +402,7 @@ const DataTable = <T extends Record<string, any>>({
           paginatedData.map((record, index) => (
             <div
               key={getRowKey(record, index)}
-              className={`flex items-center hover:bg-background-25 transition-colors overflow-x-auto justify-between ${
+              className={`flex items-center hover:bg-background-25 transition-colors justify-between ${
                 onRowClick ? "cursor-pointer" : ""
               } ${isRowSelected(record) ? "bg-primary-50" : ""}`}
               onClick={() => onRowClick?.(record, index)}
@@ -305,6 +428,9 @@ const DataTable = <T extends Record<string, any>>({
                     width: column.width || "auto",
                     minWidth: column.minWidth || column.width || "120px",
                     textAlign: column.align || "right",
+                    wordBreak: "break-word",
+                    overflowWrap: "break-word",
+                    maxWidth: "100%",
                   }}
                 >
                   {column.render
@@ -312,9 +438,11 @@ const DataTable = <T extends Record<string, any>>({
                     : record[column.dataIndex]}
                 </div>
               ))}
-              {actions.length > 0 && (
-                <div className="px-4 py-3 flex-shrink-0 min-w-[120px]">
-                  <div className="flex items-center justify-center gap-2">
+              {shouldShowActionColumn() && (
+                <div
+                  className={`px-4 py-3 flex-shrink-0 min-w-[120px] max-w-[200px] ${getActionColumnResponsiveClasses()}`}
+                >
+                  <div className="flex items-center justify-center gap-2 flex-wrap">
                     {actions.map((action, actionIndex) => (
                       <Button
                         key={actionIndex}
@@ -325,7 +453,7 @@ const DataTable = <T extends Record<string, any>>({
                           action.onClick(record, index);
                         }}
                         disabled={action.disabled?.(record)}
-                        className="flex items-center gap-1"
+                        className={`flex items-center gap-1 ${getActionResponsiveClasses(action)}`}
                       >
                         {action.icon}
                         {action.label}

@@ -14,8 +14,7 @@ const CryptoTable = () => {
       key: "name",
       title: "نام بازار",
       dataIndex: "name",
-      width: "200px",
-      minWidth: "150px",
+      minWidth: "100px",
       align: "right",
       render: (value, record) => (
         <div>
@@ -32,8 +31,8 @@ const CryptoTable = () => {
       key: "price",
       title: "آخرین قیمت",
       dataIndex: "price",
-      width: "100px",
-      minWidth: "80px",
+      width: "150px",
+      minWidth: "120px",
       align: "right",
       responsive: {
         mobile: true,
@@ -52,6 +51,11 @@ const CryptoTable = () => {
       size: "small",
       onClick: (record) => {
         console.log(record);
+      },
+      responsive: {
+        mobile: false,
+        tablet: true,
+        desktop: true,
       },
     },
   ];
