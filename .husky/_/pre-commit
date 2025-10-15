@@ -1,0 +1,6 @@
+#!/bin/sh
+echo "🔍 Running type check..."
+npx tsc --noEmit
+
+echo "🧹 Running lint-staged..."
+npx lint-staged
