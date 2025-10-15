@@ -1,3 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url("../public/fonts/style.css");
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+  @apply w-full px-4 max-w-7xl mx-auto;
+}
+
+.container-fluid {
+  @apply w-full px-10;
+}
