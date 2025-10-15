@@ -45,6 +45,7 @@ export interface DataTableProps<T = any> {
   onRowClick?: (record: T, index: number) => void;
   selectable?: boolean;
   onSelectionChange?: (selectedRows: T[]) => void;
+  actionColumnTitle?: string;
 }
 
 const DataTable = <T extends Record<string, any>>({
@@ -59,6 +60,7 @@ const DataTable = <T extends Record<string, any>>({
   onRowClick,
   selectable = false,
   onSelectionChange,
+  actionColumnTitle = "Actions",
 }: DataTableProps<T>) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(pagination.pageSize || 10);
@@ -218,12 +220,10 @@ const DataTable = <T extends Record<string, any>>({
   const visibleColumns = getVisibleColumns();
 
   return (
-    <div
-      className={`bg-card rounded-lg shadow-sm border border-gray-200 ${className}`}
-    >
+    <div className={className}>
       {/* Header */}
       <div className="bg-background-50 border-b border-gray-200 rounded-t-lg">
-        <div className="flex items-center overflow-x-auto">
+        <div className="flex items-center overflow-x-auto justify-between">
           {selectable && (
             <div className="px-4 py-3 w-12 flex-shrink-0">
               <input
@@ -237,21 +237,19 @@ const DataTable = <T extends Record<string, any>>({
           {visibleColumns.map((column) => (
             <div
               key={column.key}
-              className={`px-4 py-3 font-medium text-text-700 whitespace-nowrap flex-shrink-0 ${getResponsiveClasses(column)}`}
+              className={`px-4 py-3 font-medium text-text-200 whitespace-nowrap flex-shrink-0  ${getResponsiveClasses(column)}`}
               style={{
                 width: column.width || "auto",
                 minWidth: column.minWidth || column.width || "120px",
-                textAlign: column.align || "left",
+                textAlign: column.align || "right",
               }}
             >
-              <div
-                className={`flex items-center gap-2 ${column.align === "center" ? "justify-center" : column.align === "right" ? "justify-end" : "justify-start"}`}
-              >
-                <span>{column.title}</span>
+              <div className="flex items-center gap-2">
+                <span className="flex-1">{column.title}</span>
                 {column.sortable && (
                   <button
                     onClick={() => handleSort(column.dataIndex)}
-                    className="text-gray-400 hover:text-gray-600 ml-1"
+                    className="text-gray-400 hover:text-gray-600 flex-shrink-0"
                   >
                     {sortConfig?.key === column.dataIndex
                       ? sortConfig.direction === "asc"
@@ -265,7 +263,7 @@ const DataTable = <T extends Record<string, any>>({
           ))}
           {actions.length > 0 && (
             <div className="px-4 py-3 text-center font-medium text-text-700 flex-shrink-0 min-w-[120px]">
-              Actions
+              {actionColumnTitle}
             </div>
           )}
         </div>
@@ -281,7 +279,7 @@ const DataTable = <T extends Record<string, any>>({
           paginatedData.map((record, index) => (
             <div
               key={getRowKey(record, index)}
-              className={`flex items-center hover:bg-background-25 transition-colors overflow-x-auto ${
+              className={`flex items-center hover:bg-background-25 transition-colors overflow-x-auto justify-between ${
                 onRowClick ? "cursor-pointer" : ""
               } ${isRowSelected(record) ? "bg-primary-50" : ""}`}
               onClick={() => onRowClick?.(record, index)}
@@ -306,16 +304,12 @@ const DataTable = <T extends Record<string, any>>({
                   style={{
                     width: column.width || "auto",
                     minWidth: column.minWidth || column.width || "120px",
-                    textAlign: column.align || "left",
+                    textAlign: column.align || "right",
                   }}
                 >
-                  <div
-                    className={`${column.align === "center" ? "text-center" : column.align === "right" ? "text-right" : "text-left"}`}
-                  >
-                    {column.render
-                      ? column.render(record[column.dataIndex], record, index)
-                      : record[column.dataIndex]}
-                  </div>
+                  {column.render
+                    ? column.render(record[column.dataIndex], record, index)
+                    : record[column.dataIndex]}
                 </div>
               ))}
               {actions.length > 0 && (

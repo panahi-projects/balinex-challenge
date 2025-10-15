@@ -1,10 +1,11 @@
 "use client";
-import { Card, DataTable } from "@/shared";
+import { Card, DataTable, formatPrice } from "@/shared";
 import { ActionButton, Column } from "@/shared/components/DataTable";
 
 interface Crypto {
   name: string;
   symbol: string;
+  price: string;
 }
 
 const CryptoTable = () => {
@@ -28,16 +29,19 @@ const CryptoTable = () => {
       },
     },
     {
-      key: "symbol",
-      title: "Symbol",
-      dataIndex: "symbol",
+      key: "price",
+      title: "آخرین قیمت",
+      dataIndex: "price",
       width: "100px",
       minWidth: "80px",
-      align: "center",
+      align: "right",
       responsive: {
-        mobile: false,
+        mobile: true,
         tablet: true,
         desktop: true,
+      },
+      render: (value) => {
+        return <div className="farsi-number">{formatPrice(value)}</div>;
       },
     },
   ];
@@ -55,19 +59,27 @@ const CryptoTable = () => {
     {
       name: "Bitcoin",
       symbol: "BTC",
+      price: "100000000",
     },
     {
       name: "Ethereum",
       symbol: "ETH",
+      price: "3456",
     },
     {
       name: "Cardano",
       symbol: "ADA",
+      price: "123456789",
     },
   ];
   return (
     <Card>
-      <DataTable columns={columns} data={data} actions={actions} />
+      <DataTable
+        columns={columns}
+        data={data}
+        actions={actions}
+        actionColumnTitle=""
+      />
     </Card>
   );
 };
