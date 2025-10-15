@@ -8,7 +8,10 @@ const Header = () => {
       <div className="container-fluid">
         <div className="flex flex-row items-center justify-between gap-4 py-6">
           <div className=" flex flex-row items-center justify-start gap-16">
+            {/* Logo */}
             <Logo />
+
+            {/* Navbar */}
             <Navbar />
           </div>
 
