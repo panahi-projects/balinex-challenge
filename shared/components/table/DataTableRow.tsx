@@ -17,16 +17,18 @@ const DataTableRow = <T extends Record<string, any>>({
     shouldShowActionColumn,
     getActionResponsiveClasses,
   } = useDataTableContext();
+
   return (
     <div
       key={getRowKey(record, index)}
-      className={`flex items-center hover:bg-background-25 transition-colors justify-between ${
+      className={`flex items-center hover:bg-background-25 transition-colors min-w-max justify-between ${
         onRowClick ? "cursor-pointer" : ""
       } ${isRowSelected(record) ? "bg-primary-50" : ""}`}
       onClick={() => onRowClick?.(record, index)}
+      dir="rtl"
     >
       {selectable && (
-        <div className="px-4 py-3 w-12 flex-shrink-0">
+        <div className="px-4 py-3 w-12 flex-shrink-0 flex items-center justify-center">
           <input
             type="checkbox"
             checked={isRowSelected(record)}
@@ -43,24 +45,30 @@ const DataTableRow = <T extends Record<string, any>>({
           key={column.key}
           className={`px-4 py-3 text-text flex-shrink-0 ${getResponsiveClasses(column)}`}
           style={{
-            width: column.width || "auto",
+            width: column.width || "150px",
             minWidth: column.minWidth || column.width || "120px",
             textAlign: column.align || "right",
             wordBreak: "break-word",
             overflowWrap: "break-word",
-            maxWidth: "100%",
+            flex: `0 0 ${column.width || "150px"}`,
           }}
         >
-          {column.render
-            ? column.render(record[column.dataIndex], record, index)
-            : record[column.dataIndex]}
+          <div className="truncate" dir="rtl">
+            {column.render
+              ? column.render(record[column.dataIndex], record, index)
+              : record[column.dataIndex]}
+          </div>
         </div>
       ))}
       {shouldShowActionColumn() && (
         <div
-          className={`px-4 py-3 flex-shrink-0 min-w-[120px] max-w-[200px] ${getActionColumnResponsiveClasses()}`}
+          className={`px-4 py-3 flex-shrink-0 ${getActionColumnResponsiveClasses()}`}
+          style={{
+            flex: "0 0 120px",
+            minWidth: "120px",
+          }}
         >
-          <div className="flex items-center justify-center gap-2 flex-wrap">
+          <div className="flex items-center justify-center">
             {actions.map((action, actionIndex) => (
               <Button
                 key={actionIndex}
@@ -71,10 +79,10 @@ const DataTableRow = <T extends Record<string, any>>({
                   action.onClick(record, index);
                 }}
                 disabled={action.disabled?.(record)}
-                className={`flex items-center gap-1 ${getActionResponsiveClasses(action)}`}
+                className={`flex items-center gap-1 truncate ${getActionResponsiveClasses(action)}`}
               >
                 {action.icon}
-                {action.label}
+                <span className="truncate">{action.label}</span>
               </Button>
             ))}
           </div>

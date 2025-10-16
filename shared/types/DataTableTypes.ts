@@ -52,6 +52,7 @@ export interface ActionButton<T = any> {
   size?: "small" | "medium" | "large";
   disabled?: (record: T) => boolean;
   icon?: React.ReactNode;
+  width?: string | number;
   responsive?: {
     mobile?: boolean;
     tablet?: boolean;

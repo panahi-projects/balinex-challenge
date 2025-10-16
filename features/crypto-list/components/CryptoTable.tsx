@@ -2,27 +2,31 @@
 import { Card, DataTable, formatPrice } from "@/shared";
 import type { ActionButton, Column } from "@/shared";
 import type { Crypto } from "../types";
+import CryptoName from "./CryptoName";
+import { CryptoTableColumns } from "../constants";
 
 const CryptoTable = () => {
   const columns: Column<Crypto>[] = [
     {
       key: "name",
-      title: "نام بازار",
+      title: CryptoTableColumns.NAME as string,
       dataIndex: "name",
-      minWidth: "100px",
+      width: "250px",
       align: "right",
       render: (value, record) => (
-        <div>
-          {value} / {record.symbol}
-        </div>
+        <CryptoName
+          name={value}
+          symbol={record.symbol}
+          image={record.image}
+          price={record.price}
+        />
       ),
     },
     {
       key: "price",
-      title: "آخرین قیمت",
+      title: CryptoTableColumns.PRICE as string,
       dataIndex: "price",
       width: "150px",
-      minWidth: "120px",
       align: "right",
       responsive: {
         mobile: true,
@@ -33,12 +37,37 @@ const CryptoTable = () => {
         return <div className="farsi-number">{formatPrice(value)}</div>;
       },
     },
+    {
+      key: "transactionValue",
+      title: CryptoTableColumns.TRANSACTION_VALUE as string,
+      dataIndex: "transactionValue",
+      width: "150px",
+      align: "right",
+      responsive: {
+        mobile: false,
+        tablet: true,
+        desktop: true,
+      },
+    },
+    {
+      key: "percentChange",
+      title: CryptoTableColumns.PERCENT_CHANGE as string,
+      dataIndex: "percentChange",
+      width: "120px",
+      align: "right",
+      responsive: {
+        mobile: false,
+        tablet: true,
+        desktop: true,
+      },
+    },
   ];
   const actions: ActionButton<Crypto>[] = [
     {
       label: "خرید و فروش",
       variant: "primary",
       size: "small",
+      width: "250px",
       onClick: (record) => {
         console.log(record);
       },
@@ -57,8 +86,7 @@ const CryptoTable = () => {
       price: "100000000",
       enable: true,
       percentChange: "10%",
-      image:
-        "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
+      image: "https://assets.coincap.io/assets/icons/btc@2x.png",
       transactionValue: "100000000",
     },
     {
@@ -68,8 +96,7 @@ const CryptoTable = () => {
       price: "3456",
       enable: true,
       percentChange: "0.5%",
-      image:
-        "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
+      image: "https://assets.coincap.io/assets/icons/eth@2x.png",
       transactionValue: "50000000",
     },
     {
@@ -79,8 +106,87 @@ const CryptoTable = () => {
       price: "123456789",
       enable: true,
       percentChange: "2.5%",
-      image:
-        "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
+      image: "https://assets.coincap.io/assets/icons/ada@2x.png",
+      transactionValue: "20000000",
+    },
+    {
+      id: "4",
+      name: "Solana",
+      symbol: "SOL",
+      price: "123456789",
+      enable: true,
+      percentChange: "2.5%",
+      image: "https://assets.coincap.io/assets/icons/sol@2x.png",
+      transactionValue: "20000000",
+    },
+    {
+      id: "5",
+      name: "Polkadot",
+      symbol: "DOT",
+      price: "123456789",
+      enable: true,
+      percentChange: "2.5%",
+      image: "https://assets.coincap.io/assets/icons/dot@2x.png",
+      transactionValue: "20000000",
+    },
+    {
+      id: "6",
+      name: "Ripple",
+      symbol: "XRP",
+      price: "123456789",
+      enable: true,
+      percentChange: "2.5%",
+      image: "https://assets.coincap.io/assets/icons/xrp@2x.png",
+      transactionValue: "20000000",
+    },
+    {
+      id: "7",
+      name: "Litecoin",
+      symbol: "LTC",
+      price: "123456789",
+      enable: true,
+      percentChange: "2.5%",
+      image: "https://assets.coincap.io/assets/icons/ltc@2x.png",
+      transactionValue: "20000000",
+    },
+    {
+      id: "8",
+      name: "Bitcoin Cash",
+      symbol: "BCH",
+      price: "123456789",
+      enable: true,
+      percentChange: "2.5%",
+      image: "https://assets.coincap.io/assets/icons/bch@2x.png",
+      transactionValue: "20000000",
+    },
+    {
+      id: "9",
+      name: "Dogecoin",
+      symbol: "DOGE",
+      price: "123456789",
+      enable: true,
+      percentChange: "2.5%",
+      image: "https://assets.coincap.io/assets/icons/doge@2x.png",
+      transactionValue: "20000000",
+    },
+    {
+      id: "10",
+      name: "Tether",
+      symbol: "USDT",
+      price: "123456789",
+      enable: true,
+      percentChange: "2.5%",
+      image: "https://assets.coincap.io/assets/icons/usdt@2x.png",
+      transactionValue: "20000000",
+    },
+    {
+      id: "11",
+      name: "USD Coin",
+      symbol: "USDC",
+      price: "123456789",
+      enable: true,
+      percentChange: "2.5%",
+      image: "https://assets.coincap.io/assets/icons/usdc@2x.png",
       transactionValue: "20000000",
     },
   ];
