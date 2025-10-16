@@ -1,12 +1,7 @@
 "use client";
 import { Card, DataTable, formatPrice } from "@/shared";
-import { ActionButton, Column } from "@/shared/components/DataTable";
-
-interface Crypto {
-  name: string;
-  symbol: string;
-  price: string;
-}
+import type { ActionButton, Column } from "@/shared";
+import type { Crypto } from "../types";
 
 const CryptoTable = () => {
   const columns: Column<Crypto>[] = [
@@ -21,11 +16,6 @@ const CryptoTable = () => {
           {value} / {record.symbol}
         </div>
       ),
-      responsive: {
-        mobile: true,
-        tablet: true,
-        desktop: true,
-      },
     },
     {
       key: "price",
@@ -59,21 +49,39 @@ const CryptoTable = () => {
       },
     },
   ];
-  const data = [
+  const data: Crypto[] = [
     {
+      id: "1",
       name: "Bitcoin",
       symbol: "BTC",
       price: "100000000",
+      enable: true,
+      percentChange: "10%",
+      image:
+        "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
+      transactionValue: "100000000",
     },
     {
+      id: "2",
       name: "Ethereum",
       symbol: "ETH",
       price: "3456",
+      enable: true,
+      percentChange: "0.5%",
+      image:
+        "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
+      transactionValue: "50000000",
     },
     {
+      id: "3",
       name: "Cardano",
       symbol: "ADA",
       price: "123456789",
+      enable: true,
+      percentChange: "2.5%",
+      image:
+        "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
+      transactionValue: "20000000",
     },
   ];
   return (
