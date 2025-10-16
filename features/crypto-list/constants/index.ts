@@ -1,7 +1,7 @@
 export enum CryptoTableColumns {
   NAME = "نام بازار",
   PRICE = "آخرین قیمت",
-  TRANSACTION_VALUE = "ارزش معاملات",
+  TRANSACTION_VALUE = "ارزش معاملات (24h)",
   PERCENT_CHANGE = "درصد تغییر",
   ENABLE = "فعال",
 }
