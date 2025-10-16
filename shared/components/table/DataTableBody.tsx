@@ -1,4 +1,4 @@
-import { useDataTableContext } from "@/shared/hooks/useDataTable";
+import { useDataTableContext } from "@/shared";
 import DataTableRow from "./DataTableRow";
 
 const DataTableBody = () => {

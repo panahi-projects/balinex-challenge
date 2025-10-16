@@ -1,6 +1,4 @@
-import { useDataTableContext } from "@/shared/hooks/useDataTable";
-import { Button } from "@/shared";
-import { DataTableRowProps } from "@/shared/types";
+import { Button, DataTableRowProps, useDataTableContext } from "@/shared";
 
 const DataTableRow = <T extends Record<string, any>>({
   record,

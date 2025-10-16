@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { DataTableContextValue } from "../types";
+import { type DataTableContextValue } from "../types";
 import { DataTableContext } from "../components/table/DataTableContext";
 
 export const useDataTableContext = <
