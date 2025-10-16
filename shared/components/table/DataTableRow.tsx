@@ -1,38 +1,24 @@
-import React from "react";
-import { Button } from "../form";
-import { ActionButton, Column } from "@/shared";
-
-interface DataTableRowProps<T extends Record<string, any>> {
-  record: T;
-  index: number;
-  getRowKey: (record: T, index: number) => string;
-  onRowClick?: (record: T, index: number) => void;
-  selectable: boolean;
-  isRowSelected: (record: T) => boolean;
-  handleSelectRow: (record: T, checked: boolean) => void;
-  visibleColumns: Column<T>[];
-  getResponsiveClasses: (column: Column<T>) => string;
-  getActionColumnResponsiveClasses: () => string;
-  shouldShowActionColumn: () => boolean;
-  getActionResponsiveClasses: (action: ActionButton<T>) => string;
-  actions: ActionButton<T>[];
-}
+import { useDataTableContext } from "@/shared/hooks/useDataTable";
+import { Button } from "@/shared";
+import { DataTableRowProps } from "@/shared/types";
 
 const DataTableRow = <T extends Record<string, any>>({
   record,
   index,
-  getRowKey,
-  onRowClick,
-  selectable,
-  isRowSelected,
-  handleSelectRow,
-  visibleColumns,
-  getResponsiveClasses,
-  getActionColumnResponsiveClasses,
-  shouldShowActionColumn,
-  getActionResponsiveClasses,
-  actions,
 }: DataTableRowProps<T>) => {
+  const {
+    visibleColumns,
+    selectable,
+    actions,
+    getRowKey,
+    onRowClick,
+    isRowSelected,
+    handleSelectRow,
+    getResponsiveClasses,
+    getActionColumnResponsiveClasses,
+    shouldShowActionColumn,
+    getActionResponsiveClasses,
+  } = useDataTableContext();
   return (
     <div
       key={getRowKey(record, index)}

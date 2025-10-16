@@ -1,5 +1,4 @@
 import DataTable from "./DataTable";
-import DataTableBody from "./DataTableBody";
-import DataTableRow from "./DataTableRow";
+import { DataTableProvider } from "./DataTableContext";
 
-export { DataTable, DataTableBody, DataTableRow };
+export { DataTable, DataTableProvider };
