@@ -1,6 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/** 
+ * Add Google Fonts - Poppins for latin words
+ */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap");
+
+/* Apply Poppins to latin/english text using a utility class */
+.latin-font,
+.latin-font * {
+  font-family: "Poppins", Arial, Helvetica, sans-serif !important;
+  font-variant-ligatures: none;
+  letter-spacing: 0.01em;
+}
+
+/* Optional: auto-detect latin and apply font via unicode-range */
+@media (lang: en) {
+  body {
+    font-family: "Poppins", Arial, Helvetica, sans-serif;
+  }
+}
+
 @import url("../public/fonts/style.css");
 
 * {

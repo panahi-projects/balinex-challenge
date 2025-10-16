@@ -4,6 +4,7 @@ import type { ActionButton, Column } from "@/shared";
 import type { Crypto } from "../types";
 import CryptoName from "./CryptoName";
 import { CryptoTableColumns } from "../constants";
+import CryptoPercentChange from "./CryptoPercentChange";
 
 const CryptoTable = () => {
   const columns: Column<Crypto>[] = [
@@ -11,7 +12,7 @@ const CryptoTable = () => {
       key: "name",
       title: CryptoTableColumns.NAME as string,
       dataIndex: "name",
-      width: "250px",
+      width: "200px",
       align: "right",
       render: (value, record) => (
         <CryptoName
@@ -34,7 +35,14 @@ const CryptoTable = () => {
         desktop: true,
       },
       render: (value) => {
-        return <div className="farsi-number">{formatPrice(value)}</div>;
+        return (
+          <div className="flex items-center gap-2">
+            <span className="text-bold farsi-number text-[12px] md:text-[14px] lg:text-[16px]">
+              {formatPrice(value)}
+            </span>{" "}
+            <span className="text-secondary-text text-sm">تتر</span>
+          </div>
+        );
       },
     },
     {
@@ -48,6 +56,14 @@ const CryptoTable = () => {
         tablet: true,
         desktop: true,
       },
+      render: (value) => {
+        return (
+          <div className="flex items-center gap-2">
+            <span className="farsi-number text-bold">{formatPrice(value)}</span>{" "}
+            <span className="text-secondary-text text-sm">تتر</span>
+          </div>
+        );
+      },
     },
     {
       key: "percentChange",
@@ -60,6 +76,9 @@ const CryptoTable = () => {
         tablet: true,
         desktop: true,
       },
+      render: (value) => {
+        return <CryptoPercentChange percentChange={value || "0%"} />;
+      },
     },
   ];
   const actions: ActionButton<Crypto>[] = [
@@ -67,7 +86,7 @@ const CryptoTable = () => {
       label: "خرید و فروش",
       variant: "primary",
       size: "small",
-      width: "250px",
+      width: "200px",
       onClick: (record) => {
         console.log(record);
       },
@@ -85,7 +104,7 @@ const CryptoTable = () => {
       symbol: "BTC",
       price: "100000000",
       enable: true,
-      percentChange: "10%",
+      percentChange: "10",
       image: "https://assets.coincap.io/assets/icons/btc@2x.png",
       transactionValue: "100000000",
     },
@@ -95,7 +114,7 @@ const CryptoTable = () => {
       symbol: "ETH",
       price: "3456",
       enable: true,
-      percentChange: "0.5%",
+      percentChange: "-0.5",
       image: "https://assets.coincap.io/assets/icons/eth@2x.png",
       transactionValue: "50000000",
     },
@@ -105,7 +124,7 @@ const CryptoTable = () => {
       symbol: "ADA",
       price: "123456789",
       enable: true,
-      percentChange: "2.5%",
+      percentChange: "2.5",
       image: "https://assets.coincap.io/assets/icons/ada@2x.png",
       transactionValue: "20000000",
     },
@@ -115,7 +134,7 @@ const CryptoTable = () => {
       symbol: "SOL",
       price: "123456789",
       enable: true,
-      percentChange: "2.5%",
+      percentChange: "-3.5",
       image: "https://assets.coincap.io/assets/icons/sol@2x.png",
       transactionValue: "20000000",
     },
@@ -125,7 +144,7 @@ const CryptoTable = () => {
       symbol: "DOT",
       price: "123456789",
       enable: true,
-      percentChange: "2.5%",
+      percentChange: "-4.5",
       image: "https://assets.coincap.io/assets/icons/dot@2x.png",
       transactionValue: "20000000",
     },
@@ -135,7 +154,7 @@ const CryptoTable = () => {
       symbol: "XRP",
       price: "123456789",
       enable: true,
-      percentChange: "2.5%",
+      percentChange: "2.5",
       image: "https://assets.coincap.io/assets/icons/xrp@2x.png",
       transactionValue: "20000000",
     },
@@ -145,7 +164,7 @@ const CryptoTable = () => {
       symbol: "LTC",
       price: "123456789",
       enable: true,
-      percentChange: "2.5%",
+      percentChange: "2.5",
       image: "https://assets.coincap.io/assets/icons/ltc@2x.png",
       transactionValue: "20000000",
     },
@@ -155,7 +174,7 @@ const CryptoTable = () => {
       symbol: "BCH",
       price: "123456789",
       enable: true,
-      percentChange: "2.5%",
+      percentChange: "12.5",
       image: "https://assets.coincap.io/assets/icons/bch@2x.png",
       transactionValue: "20000000",
     },
@@ -165,7 +184,7 @@ const CryptoTable = () => {
       symbol: "DOGE",
       price: "123456789",
       enable: true,
-      percentChange: "2.5%",
+      percentChange: "2.5",
       image: "https://assets.coincap.io/assets/icons/doge@2x.png",
       transactionValue: "20000000",
     },
@@ -175,7 +194,7 @@ const CryptoTable = () => {
       symbol: "USDT",
       price: "123456789",
       enable: true,
-      percentChange: "2.5%",
+      percentChange: "2.5",
       image: "https://assets.coincap.io/assets/icons/usdt@2x.png",
       transactionValue: "20000000",
     },
@@ -185,7 +204,7 @@ const CryptoTable = () => {
       symbol: "USDC",
       price: "123456789",
       enable: true,
-      percentChange: "2.5%",
+      percentChange: "2.5",
       image: "https://assets.coincap.io/assets/icons/usdc@2x.png",
       transactionValue: "20000000",
     },
