@@ -5,6 +5,7 @@ import type { Crypto } from "../types";
 import CryptoName from "./CryptoName";
 import { CryptoTableColumns } from "../constants";
 import CryptoPercentChange from "./CryptoPercentChange";
+import ViewMoreButton from "./ViewMoreButton";
 import { useEffect, useState } from "react";
 import { useCryptoData } from "../hooks";
 
@@ -16,6 +17,10 @@ const CryptoTable = () => {
     lastUpdated,
     refetch,
     isRefreshing,
+    loadMore,
+    hasMore,
+    isLoadingMore,
+    totalLoaded,
   } = useCryptoData({
     per_page: 20,
     refetchInterval: 60000, // 60 seconds
@@ -27,7 +32,7 @@ const CryptoTable = () => {
       key: "rank",
       title: "",
       dataIndex: "rank",
-      width: "50px",
+      width: "80px",
       align: "center",
       render: (value) => {
         return (
@@ -178,7 +183,7 @@ const CryptoTable = () => {
           </div>
         )}
 
-        <div className="transition-opacity duration-300">
+        <div className="transition-all duration-500 ease-in-out">
           <DataTable
             columns={columns as Column<Crypto>[]}
             data={data}
@@ -187,12 +192,25 @@ const CryptoTable = () => {
           />
         </div>
 
+        {/* View More Button */}
+        <ViewMoreButton
+          onClick={loadMore}
+          isLoading={isLoadingMore}
+          hasMore={hasMore}
+          totalLoaded={totalLoaded}
+        />
+
         {/* Last updated timestamp */}
         {lastUpdated && (
           <div className="mt-4 text-center">
             <span className="text-xs text-gray-500">
               آخرین به‌روزرسانی:{" "}
               {new Date(lastUpdated).toLocaleTimeString("fa-IR")}
+              {isRefreshing && (
+                <span className="mr-2 text-green-500">
+                  (در حال به‌روزرسانی...)
+                </span>
+              )}
             </span>
           </div>
         )}

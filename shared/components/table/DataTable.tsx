@@ -16,7 +16,6 @@ const DataTable = <T extends Record<string, any>>({
   data,
   columns,
   actions = [],
-  pagination = { pageSize: 10 },
   loading = false,
   emptyText = "No data available",
   className = "",
@@ -26,8 +25,6 @@ const DataTable = <T extends Record<string, any>>({
   onRowClick,
   onSelectionChange,
 }: DataTableProps<T>) => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(pagination.pageSize || 10);
   const [sortConfig, setSortConfig] = useState<{
     key: string;
     direction: "asc" | "desc";
@@ -60,15 +57,6 @@ const DataTable = <T extends Record<string, any>>({
     });
   }, [data, sortConfig]);
 
-  // Pagination
-  const paginatedData = useMemo(() => {
-    const startIndex = (currentPage - 1) * pageSize;
-    const endIndex = startIndex + pageSize;
-    return sortedData.slice(startIndex, endIndex);
-  }, [sortedData, currentPage, pageSize]);
-
-  const totalPages = Math.ceil(sortedData.length / pageSize);
-
   // Handlers
   const handleSort = (key: string) => {
     const column = columns.find((col) => col.dataIndex === key);
@@ -82,19 +70,10 @@ const DataTable = <T extends Record<string, any>>({
     });
   };
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
-
-  const handlePageSizeChange = (newPageSize: number) => {
-    setPageSize(newPageSize);
-    setCurrentPage(1);
-  };
-
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
-      setSelectedRows(paginatedData);
-      onSelectionChange?.(paginatedData);
+      setSelectedRows(sortedData);
+      onSelectionChange?.(sortedData);
     } else {
       setSelectedRows([]);
       onSelectionChange?.([]);
@@ -121,7 +100,7 @@ const DataTable = <T extends Record<string, any>>({
   };
 
   const isAllSelected =
-    paginatedData.length > 0 && selectedRows.length === paginatedData.length;
+    sortedData.length > 0 && selectedRows.length === sortedData.length;
 
   if (loading) {
     return (
@@ -134,7 +113,7 @@ const DataTable = <T extends Record<string, any>>({
   const visibleColumns = getVisibleColumns<T>(columns);
 
   const contextValue = {
-    paginatedData,
+    data: sortedData,
     emptyText,
     visibleColumns,
     actions,
@@ -218,115 +197,6 @@ const DataTable = <T extends Record<string, any>>({
           <div className="min-w-max">
             <DataTableBody />
           </div>
-
-          {/* Pagination - Keep your existing pagination code */}
-          {pagination && totalPages > 1 && (
-            <div className="px-4 py-3 border-t border-gray-200 bg-background-25">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  {pagination.showTotal && (
-                    <span className="text-sm text-secondary-text">
-                      Showing {(currentPage - 1) * pageSize + 1} to{" "}
-                      {Math.min(currentPage * pageSize, sortedData.length)} of{" "}
-                      {sortedData.length} entries
-                    </span>
-                  )}
-                  {pagination.showSizeChanger && (
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm text-secondary-text">Show:</span>
-                      <select
-                        value={pageSize}
-                        onChange={(e) =>
-                          handlePageSizeChange(Number(e.target.value))
-                        }
-                        className="border border-gray-300 rounded px-2 py-1 text-sm"
-                      >
-                        <option value={10}>10</option>
-                        <option value={20}>20</option>
-                        <option value={50}>50</option>
-                        <option value={100}>100</option>
-                      </select>
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="secondary"
-                    size="small"
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                  >
-                    Previous
-                  </Button>
-
-                  {pagination.showQuickJumper ? (
-                    <div className="flex items-center gap-1">
-                      <input
-                        type="number"
-                        min={1}
-                        max={totalPages}
-                        value={currentPage}
-                        onChange={(e) => {
-                          const page = Number(e.target.value);
-                          if (page >= 1 && page <= totalPages) {
-                            handlePageChange(page);
-                          }
-                        }}
-                        className="w-16 border border-gray-300 rounded px-2 py-1 text-sm text-center"
-                      />
-                      <span className="text-sm text-secondary-text">
-                        of {totalPages}
-                      </span>
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-1">
-                      {Array.from(
-                        { length: Math.min(5, totalPages) },
-                        (_, i) => {
-                          let pageNum;
-                          if (totalPages <= 5) {
-                            pageNum = i + 1;
-                          } else if (currentPage <= 3) {
-                            pageNum = i + 1;
-                          } else if (currentPage >= totalPages - 2) {
-                            pageNum = totalPages - 4 + i;
-                          } else {
-                            pageNum = currentPage - 2 + i;
-                          }
-
-                          return (
-                            <Button
-                              key={pageNum}
-                              variant={
-                                currentPage === pageNum
-                                  ? "primary"
-                                  : "secondary"
-                              }
-                              size="small"
-                              onClick={() => handlePageChange(pageNum)}
-                              className="w-8 h-8 p-0"
-                            >
-                              {pageNum}
-                            </Button>
-                          );
-                        }
-                      )}
-                    </div>
-                  )}
-
-                  <Button
-                    variant="secondary"
-                    size="small"
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                  >
-                    Next
-                  </Button>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </DataTableProvider>

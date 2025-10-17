@@ -25,14 +25,13 @@ export async function scrapeCryptoData(url: string): Promise<CryptoCurrency[]> {
     const $ = cheerio.load(html);
     const cryptoData: CryptoCurrency[] = [];
 
+    let c = 0;
     $("table tbody tr").each((_, el) => {
+      c++;
       const tds = $(el).find("td");
 
-      const rank = $(tds[0]).text().trim();
-
-      const name =
-        $(tds[1]).find("a[title]").last().attr("title")?.trim().split(" ")[0] ||
-        "";
+      let rank = $(tds[0]).text().trim() || c.toString();
+      const name = $(tds[1]).find("a").last().text().trim().split(" ")[0] || "";
       const symbol = $(tds[1]).find("a").first().text().trim();
       const image = $(tds[1]).find("img").attr("src") || "";
       const marketCap = $(tds[3]).find("span").first().text().trim();
@@ -54,6 +53,8 @@ export async function scrapeCryptoData(url: string): Promise<CryptoCurrency[]> {
         change24h,
       });
     });
+
+    console.log(" ---> len: ", cryptoData.length);
 
     return cryptoData;
   } catch (error: any) {

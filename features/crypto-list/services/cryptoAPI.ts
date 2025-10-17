@@ -20,7 +20,7 @@ const cryptoPriorityAPI = new CryptoPriorityAPI();
 cryptoPriorityAPI.addEndpoint({
   name: "CoinGecko",
   priority: 1,
-  timeout: 10000,
+  timeout: 8000,
   handler: async (params: CryptoMarketParams): Promise<CryptoCurrency[]> => {
     const COINGECKO_API_BASE_URL = "https://api.coingecko.com/api/v3";
     const api = BaseAPI.getInstance(COINGECKO_API_BASE_URL);
@@ -42,11 +42,13 @@ cryptoPriorityAPI.addEndpoint({
 cryptoPriorityAPI.addEndpoint({
   name: "Scraping-Fallback",
   priority: 2,
-  timeout: 8000,
+  timeout: 10000,
   handler: async (params: CryptoMarketParams): Promise<CryptoCurrency[]> => {
     const cryptoData = await scrapeCryptoData(
       "https://coinmarketcap.com/all/views/all/"
     );
+
+    console.log("cryptoData length", cryptoData.length);
 
     // Apply pagination to scraped data
     const { per_page = 100, page = 1 } = params;

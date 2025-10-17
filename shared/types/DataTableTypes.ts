@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 
 export interface DataTableContextValue<T extends Record<string, any>> {
   // Data
-  paginatedData: T[];
+  data: T[];
   emptyText: string;
   visibleColumns: Column<T>[];
   actions: ActionButton<T>[];
@@ -64,12 +64,6 @@ export interface DataTableProps<T = any> {
   data: T[];
   columns: Column<T>[];
   actions?: ActionButton<T>[];
-  pagination?: {
-    pageSize?: number;
-    showSizeChanger?: boolean;
-    showQuickJumper?: boolean;
-    showTotal?: boolean;
-  };
   loading?: boolean;
   emptyText?: string;
   className?: string;
