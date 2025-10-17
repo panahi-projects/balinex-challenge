@@ -2,16 +2,16 @@ import axios from "axios";
 import * as cheerio from "cheerio";
 import { randomUUID } from "crypto";
 
-interface CryptoCurrency {
+export interface CryptoCurrency {
   id: string;
   rank: string;
   name: string;
   symbol: string;
-  image: string;
   price: string;
-  marketCap: string;
-  volume24h: string;
   change24h: string;
+  image?: string;
+  volume24h: string;
+  marketCap?: string;
 }
 
 export async function scrapeCryptoData(url: string): Promise<CryptoCurrency[]> {
@@ -35,7 +35,6 @@ export async function scrapeCryptoData(url: string): Promise<CryptoCurrency[]> {
         "";
       const symbol = $(tds[1]).find("a").first().text().trim();
       const image = $(tds[1]).find("img").attr("src") || "";
-
       const marketCap = $(tds[3]).find("span").first().text().trim();
       const price = $(tds[4]).find("span").first().text().trim();
       const volume24h = $(tds[6]).text().trim();

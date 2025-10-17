@@ -1,6 +1,6 @@
 "use client";
-import { Card, DataTable, formatPrice } from "@/shared";
-import type { ActionButton, Column } from "@/shared";
+import { Card, DataTable } from "@/shared";
+import type { ActionButton, Column, CryptoCurrency } from "@/shared";
 import type { Crypto } from "../types";
 import CryptoName from "./CryptoName";
 import { CryptoTableColumns } from "../constants";
@@ -9,12 +9,44 @@ import { useEffect, useState } from "react";
 import { useCryptoData } from "../hooks";
 
 const CryptoTable = () => {
-  const columns: Column<Crypto>[] = [
+  const {
+    data: cryptoData,
+    loading,
+    error,
+    lastUpdated,
+    refetch,
+    isRefreshing,
+  } = useCryptoData({
+    per_page: 20,
+    refetchInterval: 60000, // 60 seconds
+  });
+  const [data, setData] = useState<Crypto[]>([]);
+
+  const columns: Column<CryptoCurrency>[] = [
+    {
+      key: "rank",
+      title: "",
+      dataIndex: "rank",
+      width: "50px",
+      align: "center",
+      render: (value) => {
+        return (
+          <span className="text-bold farsi-number text-[12px] md:text-[14px] lg:text-[16px]">
+            {value}
+          </span>
+        );
+      },
+      responsive: {
+        mobile: false,
+        tablet: true,
+        desktop: true,
+      },
+    },
     {
       key: "name",
       title: CryptoTableColumns.NAME as string,
       dataIndex: "name",
-      width: "200px",
+      width: "250px",
       align: "right",
       render: (value, record) => (
         <CryptoName
@@ -40,7 +72,7 @@ const CryptoTable = () => {
         return (
           <div className="flex items-center gap-2">
             <span className="text-bold farsi-number text-[12px] md:text-[14px] lg:text-[16px]">
-              {formatPrice(value)}
+              {value}
             </span>{" "}
             <span className="text-secondary-text text-sm">تتر</span>
           </div>
@@ -50,7 +82,7 @@ const CryptoTable = () => {
     },
     {
       key: "transactionValue",
-      title: CryptoTableColumns.TRANSACTION_VALUE as string,
+      title: CryptoTableColumns.VOLUME_24H as string,
       dataIndex: "transactionValue",
       width: "200px",
       align: "right",
@@ -62,7 +94,7 @@ const CryptoTable = () => {
       render: (value) => {
         return (
           <div className="flex items-center gap-2">
-            <span className="farsi-number text-bold">{formatPrice(value)}</span>{" "}
+            <span className="farsi-number text-bold">{value}</span>{" "}
             <span className="text-secondary-text text-sm">تتر</span>
           </div>
         );
@@ -102,51 +134,70 @@ const CryptoTable = () => {
     },
   ];
 
-  const [cryptoData, setCryptoData] = useState<Crypto[]>([]);
+  useEffect(() => {
+    if (cryptoData) {
+      setData(
+        cryptoData.map((item) => ({
+          id: item.id,
+          rank: item.rank,
+          name: item.name,
+          symbol: item.symbol,
+          price: item.price,
+          image: item.image,
+          enable: true,
+          percentChange: item.change24h.toString(),
+          transactionValue: item.volume24h,
+        }))
+      );
+    }
+  }, [cryptoData]);
 
-  // const {
-  //   data: cryptoData,
-  //   loading,
-  //   error,
-  // } = useCryptoData({
-  //   vs_currency: "usd",
-  //   order: "market_cap_desc",
-  //   per_page: 10,
-  //   page: 1,
-  // });
-
-  // console.log("loading: ", loading);
-  // console.log("error: ", error);
-  // console.log("cryptoData: ", cryptoData);
-
-  const [data, _] = useState<Crypto[]>([]);
-
-  // useEffect(() => {
-  //   if (cryptoData) {
-  //     setData(
-  //       cryptoData.map((item) => ({
-  //         id: item.id,
-  //         name: item.name,
-  //         symbol: item.symbol,
-  //         price: item.current_price.toString(),
-  //         image: item.image,
-  //         enable: true,
-  //         percentChange: item.price_change_percentage_24h.toFixed(2).toString(),
-  //         transactionValue: item.low_24h.toString(),
-  //       }))
-  //     );
-  //   }
-  // }, [cryptoData]);
-
+  if (loading) {
+    return <div>Loading cryptocurrency data...</div>;
+  }
+  if (error) {
+    return (
+      <div>
+        <div>Error: {error}</div>
+        <button onClick={refetch}>Retry</button>
+      </div>
+    );
+  }
   return (
-    <Card>
-      <DataTable
-        columns={columns}
-        data={data}
-        actions={actions}
-        actionColumnTitle=""
-      />
-    </Card>
+    <div className="relative">
+      <Card>
+        {/* Subtle refresh indicator */}
+        {isRefreshing && (
+          <div className="absolute top-4 right-4 z-10">
+            <div className="flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-lg px-3 py-2 shadow-sm">
+              <div className="w-3 h-3 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+              <span className="text-xs text-blue-600 font-medium">
+                به‌روزرسانی...
+              </span>
+            </div>
+          </div>
+        )}
+
+        <div className="transition-opacity duration-300">
+          <DataTable
+            columns={columns as Column<Crypto>[]}
+            data={data}
+            actions={actions}
+            actionColumnTitle=""
+          />
+        </div>
+
+        {/* Last updated timestamp */}
+        {lastUpdated && (
+          <div className="mt-4 text-center">
+            <span className="text-xs text-gray-500">
+              آخرین به‌روزرسانی:{" "}
+              {new Date(lastUpdated).toLocaleTimeString("fa-IR")}
+            </span>
+          </div>
+        )}
+      </Card>
+    </div>
   );
 };
 

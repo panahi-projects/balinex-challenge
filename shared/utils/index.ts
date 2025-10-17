@@ -1,1 +1,1 @@
-export * from "./formatNumber";
+export * from "./format-number";

@@ -1,4 +1,11 @@
-import { BaseAPI } from "@/shared";
+import {
+  BaseAPI,
+  CryptoCurrency,
+  CryptoPriorityAPI,
+  scrapeCryptoData,
+} from "@/shared";
+import { NormalizerFactory } from "../normalizers";
+import { CoinGeckoCryptoData, ScrapedCryptoData } from "../types";
 
 interface CryptoMarketParams {
   vs_currency: string;
@@ -8,38 +15,52 @@ interface CryptoMarketParams {
   [key: string]: string | number | boolean | undefined;
 }
 
-export interface CryptoCoin {
-  id: string;
-  symbol: string;
-  name: string;
-  image: string;
-  current_price: number;
-  market_cap: number;
-  market_cap_rank: number;
-  total_volume: number;
-  high_24h: number;
-  low_24h: number;
-  price_change_24h: number;
-  price_change_percentage_24h: number;
-  circulating_supply: number;
-  total_supply: number | null;
-  max_supply: number | null;
-  ath: number;
-  ath_change_percentage: number;
-  atl: number;
-  atl_change_percentage: number;
-  last_updated: string;
-}
+const cryptoPriorityAPI = new CryptoPriorityAPI();
 
-const COINGECKO_API_BASE_URL = "https://api.coingecko.com/api/v3";
+cryptoPriorityAPI.addEndpoint({
+  name: "CoinGecko",
+  priority: 1,
+  timeout: 10000,
+  handler: async (params: CryptoMarketParams): Promise<CryptoCurrency[]> => {
+    const COINGECKO_API_BASE_URL = "https://api.coingecko.com/api/v3";
+    const api = BaseAPI.getInstance(COINGECKO_API_BASE_URL);
 
-const cryptoAPI = BaseAPI.getInstance(COINGECKO_API_BASE_URL);
+    // Fetch raw data from CoinGecko
+    const rawData = await api.get<CoinGeckoCryptoData[]>(
+      "coins/markets",
+      params as Record<string, string | number>
+    );
 
-export const getCryptoCoins = async (
-  params: CryptoMarketParams
-): Promise<CryptoCoin[]> => {
-  return cryptoAPI.get<CryptoCoin[]>(
-    "coins/markets",
-    params as Record<string, string | number>
-  );
-};
+    // Normalize CoinGecko data using the normalizer
+    return NormalizerFactory.normalizeDataWithSource<CoinGeckoCryptoData>(
+      rawData,
+      "coinGecko"
+    );
+  },
+});
+
+cryptoPriorityAPI.addEndpoint({
+  name: "Scraping-Fallback",
+  priority: 2,
+  timeout: 8000,
+  handler: async (params: CryptoMarketParams): Promise<CryptoCurrency[]> => {
+    const cryptoData = await scrapeCryptoData(
+      "https://coinmarketcap.com/all/views/all/"
+    );
+
+    // Apply pagination to scraped data
+    const { per_page = 100, page = 1 } = params;
+    const startIndex = (page - 1) * per_page;
+    const endIndex = startIndex + per_page;
+
+    const paginatedData = cryptoData.slice(startIndex, endIndex);
+
+    // Normalize scraped data using the normalizer
+    return NormalizerFactory.normalizeDataWithSource<ScrapedCryptoData>(
+      paginatedData,
+      "scraping"
+    );
+  },
+});
+
+export { cryptoPriorityAPI };

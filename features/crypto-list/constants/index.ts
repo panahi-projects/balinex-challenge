@@ -1,9 +1,13 @@
 export enum CryptoTableColumns {
+  RANK = "رده",
   NAME = "نام بازار",
+  SYMBOL = "نماد",
   PRICE = "آخرین قیمت",
-  TRANSACTION_VALUE = "ارزش معاملات (24h)",
   PERCENT_CHANGE = "درصد تغییر",
-  ENABLE = "فعال",
+  MARKET_CAP = "ارزش بازار",
+  VOLUME_24H = "حجم معاملات (24h)",
+  CHANGE_24H = "درصد تغییر (24h)",
+  LAST_UPDATED = "آخرین به روز رسانی",
 }
 
 export enum CryptoCurrency {

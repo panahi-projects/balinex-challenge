@@ -2,12 +2,12 @@
 const nextConfig = {
   images: {
     domains: [
-      "www.google.com",
       "assets.coincap.io",
       "assets.coingecko.com",
       "coin-images.coingecko.com",
-      "s2.coinmarketcap.com",
-      "cryptologos.cc/",
+      "cryptologos.cc",
+      "raw.githubusercontent.com",
+      "cryptocoins-icons.github.io",
     ],
   },
   webpack: (config, { isServer }) => {

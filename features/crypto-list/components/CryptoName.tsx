@@ -3,9 +3,12 @@ import { Crypto } from "../types";
 import { CryptoCurrency } from "../constants";
 
 const CryptoName = ({ name, symbol, image }: Omit<Crypto, "id">) => {
+  const fallbackLogo = "/images/coin-placeholder.webp";
+  const logoUrl = image || fallbackLogo;
+
   return (
     <div className="flex items-center gap-4">
-      <Image src={image || ""} alt={name} width={40} height={40} />
+      <Image src={logoUrl} alt={name} width={40} height={40} />
       <div className="flex flex-col gap-1">
         <div>
           <span className="text-[12px] md:text-[14px] lg:text-[16px]">
