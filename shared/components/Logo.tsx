@@ -10,6 +10,9 @@ const Logo = () => {
       height={25}
       aria-label="BalinexLogo"
       aria-labelledby="BalinexLogo"
+      priority
+      loading="eager"
+      className="w-auto h-auto"
     />
   );
 };
