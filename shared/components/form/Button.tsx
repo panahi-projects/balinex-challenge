@@ -1,6 +1,6 @@
 interface ButtonProps {
   children: React.ReactNode;
-  onClick?: () => void;
+  onClick?: (e: any) => void;
   className?: string;
   type?: "button" | "submit" | "reset";
   disabled?: boolean;
@@ -28,7 +28,7 @@ const Button = ({
           ? "bg-secondary-text-200 text-white"
           : variant === "success"
             ? "bg-success-500 text-white"
-            : "bg-danger-500 text-white";
+            : "bg-error-800 text-white";
   const sizeClass =
     size === "small" ? "text-sm" : size === "medium" ? "text-base" : "text-lg";
   const outlineClass = outline
