@@ -11,6 +11,7 @@ import {
 import { useMemo, useState } from "react";
 import DataTableBody from "./DataTableBody";
 import { DataTableProvider } from "./DataTableContext";
+import DataTableSearch from "./DataTableSearch";
 
 const DataTable = <T extends Record<string, any>>({
   data,
@@ -31,6 +32,11 @@ const DataTable = <T extends Record<string, any>>({
     direction: "asc" | "desc";
   } | null>(null);
   const [selectedRows, setSelectedRows] = useState<T[]>([]);
+  const [search, setSearch] = useState<string>("");
+  const [debouncedSearch, setDebouncedSearch] = useState<string>("");
+
+  // Get visible columns early
+  const visibleColumns = getVisibleColumns<T>(columns);
 
   // Get row key
   const getRowKey = (record: T, index: number): string => {
@@ -40,11 +46,30 @@ const DataTable = <T extends Record<string, any>>({
     return record[rowKey] || index.toString();
   };
 
-  // Sorting
-  const sortedData = useMemo(() => {
-    if (!sortConfig) return data;
+  // Search filtering function
+  const filterData = (data: T[], searchTerm: string): T[] => {
+    if (!searchTerm.trim()) return data;
 
-    return [...data].sort((a, b) => {
+    return data.filter((record) => {
+      return visibleColumns.some((column) => {
+        const value = record[column.dataIndex];
+        if (value === null || value === undefined) return false;
+
+        const stringValue = String(value).toLowerCase();
+        const searchLower = searchTerm.toLowerCase();
+
+        return stringValue.includes(searchLower);
+      });
+    });
+  };
+
+  // Sorting and filtering
+  const sortedData = useMemo(() => {
+    let filteredData = filterData(data, debouncedSearch);
+
+    if (!sortConfig) return filteredData;
+
+    return [...filteredData].sort((a, b) => {
       const aValue = a[sortConfig.key];
       const bValue = b[sortConfig.key];
 
@@ -56,7 +81,7 @@ const DataTable = <T extends Record<string, any>>({
       }
       return 0;
     });
-  }, [data, sortConfig]);
+  }, [data, sortConfig, debouncedSearch, visibleColumns]);
 
   // Handlers
   const handleSort = (key: string) => {
@@ -111,8 +136,6 @@ const DataTable = <T extends Record<string, any>>({
     );
   }
 
-  const visibleColumns = getVisibleColumns<T>(columns);
-
   const contextValue = {
     data: sortedData,
     emptyText,
@@ -121,6 +144,10 @@ const DataTable = <T extends Record<string, any>>({
     selectedRows,
     selectable,
     rowKey,
+    search,
+    setSearch,
+    debouncedSearch,
+    setDebouncedSearch,
     getRowKey,
     getResponsiveClasses,
     getActionResponsiveClasses,
@@ -136,7 +163,10 @@ const DataTable = <T extends Record<string, any>>({
   return (
     <DataTableProvider value={contextValue}>
       <div className={`overflow-x-auto ${className}`}>
-        <div className="min-w-full">
+        <div className="min-w-full space-y-4">
+          <div className="w-full">
+            <DataTableSearch />
+          </div>
           {/* Header */}
           <div className="bg-background-50 border-b border-gray-200 rounded-t-lg min-w-max">
             <div className="flex items-center justify-between" dir="rtl">

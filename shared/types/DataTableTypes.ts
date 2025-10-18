@@ -8,6 +8,12 @@ export interface DataTableContextValue<T extends Record<string, any>> {
   actions: ActionButton<T>[];
   selectedRows: T[];
 
+  // Search
+  search: string;
+  setSearch: (search: string) => void;
+  debouncedSearch: string;
+  setDebouncedSearch: (search: string) => void;
+
   // Configuration
   selectable: boolean;
   rowKey: string | ((record: T) => string);
