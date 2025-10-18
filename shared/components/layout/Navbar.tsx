@@ -16,6 +16,13 @@ const Navbar = () => {
       href: "/crypto/new",
       children: [],
     },
+    {
+      id: "search-highlight",
+      label: "جستجوی متنی",
+      name: "search-highlight",
+      href: "/search-highlight",
+      children: [],
+    },
   ];
   return (
     <nav>
