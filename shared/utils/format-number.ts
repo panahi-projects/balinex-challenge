@@ -13,7 +13,7 @@ export const formatPrice = (input: number | string) => {
 
   // If there's a decimal part, include it
   if (parts.length > 1) {
-    return `${integerPart}.${parts[1]}`;
+    return `${integerPart}/${parts[1]}`;
   }
 
   return integerPart;
