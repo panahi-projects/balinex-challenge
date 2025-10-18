@@ -1,9 +1,15 @@
-import { Button, DataTableRowProps, useDataTableContext } from "@/shared";
+import {
+  Button,
+  DataTableRowProps,
+  useDataTableContext,
+  useResponsive,
+} from "@/shared";
 
 const DataTableRow = <T extends Record<string, any>>({
   record,
   index,
 }: DataTableRowProps<T>) => {
+  const { isMobile, isTablet } = useResponsive();
   const {
     visibleColumns,
     selectable,
@@ -40,26 +46,40 @@ const DataTableRow = <T extends Record<string, any>>({
           />
         </div>
       )}
-      {visibleColumns.map((column) => (
-        <div
-          key={column.key}
-          className={`px-4 py-3 text-text flex-shrink-0 ${getResponsiveClasses(column)}`}
-          style={{
-            width: column.width || "150px",
-            minWidth: column.minWidth || column.width || "120px",
-            textAlign: column.align || "right",
-            wordBreak: "break-word",
-            overflowWrap: "break-word",
-            flex: `0 0 ${column.width || "150px"}`,
-          }}
-        >
-          <div className="truncate" dir="rtl">
-            {column.render
-              ? column.render(record[column.dataIndex], record, index)
-              : record[column.dataIndex]}
+      {visibleColumns.map((column) => {
+        // Determine width based on screen size
+        const getColumnWidth = () => {
+          if (isMobile && column.mobileWidth) {
+            return column.mobileWidth;
+          }
+          if (isTablet && column.tabletWidth) {
+            return column.tabletWidth;
+          }
+          return column.width || "150px";
+        };
+
+        const columnWidth = getColumnWidth();
+
+        return (
+          <div
+            key={column.key}
+            className={`px-4 py-3 text-text flex-shrink-0 ${getResponsiveClasses(column)}`}
+            style={{
+              textAlign: column.align || "right",
+              wordBreak: "break-word",
+              overflowWrap: "break-word",
+              flex: `0 0 ${columnWidth}`,
+              width: columnWidth,
+            }}
+          >
+            <div className="truncate" dir="rtl">
+              {column.render
+                ? column.render(record[column.dataIndex], record, index)
+                : record[column.dataIndex]}
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
       {shouldShowActionColumn() && (
         <div
           className={`px-4 py-3 flex-shrink-0 ${getActionColumnResponsiveClasses()}`}

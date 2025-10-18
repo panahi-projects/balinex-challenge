@@ -32,7 +32,7 @@ const CryptoTable = () => {
       key: "rank",
       title: "",
       dataIndex: "rank",
-      width: "80px",
+      width: "60px",
       align: "center",
       render: (value) => {
         return (
@@ -52,6 +52,7 @@ const CryptoTable = () => {
       title: CryptoTableColumns.NAME as string,
       dataIndex: "name",
       width: "250px",
+      mobileWidth: "200px",
       align: "right",
       render: (value, record) => (
         <CryptoName

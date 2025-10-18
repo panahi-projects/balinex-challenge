@@ -37,6 +37,8 @@ export interface Column<T = any> {
   sortable?: boolean;
   width?: string | number;
   minWidth?: string | number;
+  mobileWidth?: string | number;
+  tabletWidth?: string | number;
   align?: "left" | "center" | "right";
   responsive?: {
     mobile?: boolean;

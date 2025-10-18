@@ -1,11 +1,11 @@
 "use client";
 import {
-  Button,
   getActionColumnResponsiveClasses,
   getActionResponsiveClasses,
   getResponsiveClasses,
   getVisibleColumns,
   shouldShowActionColumn,
+  useResponsive,
   type DataTableProps,
 } from "@/shared";
 import { useMemo, useState } from "react";
@@ -25,6 +25,7 @@ const DataTable = <T extends Record<string, any>>({
   onRowClick,
   onSelectionChange,
 }: DataTableProps<T>) => {
+  const { isMobile, isTablet } = useResponsive();
   const [sortConfig, setSortConfig] = useState<{
     key: string;
     direction: "asc" | "desc";
@@ -149,36 +150,50 @@ const DataTable = <T extends Record<string, any>>({
                   />
                 </div>
               )}
-              {visibleColumns.map((column) => (
-                <div
-                  key={column.key}
-                  className={`px-4 py-3 font-medium text-text-200 flex-shrink-0 ${getResponsiveClasses(column)}`}
-                  style={{
-                    width: column.width || "150px",
-                    minWidth: column.minWidth || column.width || "120px",
-                    textAlign: column.align || "right",
-                    wordBreak: "break-word",
-                    overflowWrap: "break-word",
-                    flex: `0 0 ${column.width || "150px"}`,
-                  }}
-                >
-                  <div className="flex items-center gap-2" dir="rtl">
-                    <span className="flex-1 truncate">{column.title}</span>
-                    {column.sortable && (
-                      <button
-                        onClick={() => handleSort(column.dataIndex)}
-                        className="text-gray-400 hover:text-gray-600 flex-shrink-0"
-                      >
-                        {sortConfig?.key === column.dataIndex
-                          ? sortConfig.direction === "asc"
-                            ? "↑"
-                            : "↓"
-                          : "↕"}
-                      </button>
-                    )}
+              {visibleColumns.map((column) => {
+                // Determine width based on screen size
+                const getColumnWidth = () => {
+                  if (isMobile && column.mobileWidth) {
+                    return column.mobileWidth;
+                  }
+                  if (isTablet && column.tabletWidth) {
+                    return column.tabletWidth;
+                  }
+                  return column.width || "150px";
+                };
+
+                const columnWidth = getColumnWidth();
+
+                return (
+                  <div
+                    key={column.key}
+                    className={`px-4 py-3 font-medium text-text-200 flex-shrink-0 ${getResponsiveClasses(column)}`}
+                    style={{
+                      textAlign: column.align || "right",
+                      wordBreak: "break-word",
+                      overflowWrap: "break-word",
+                      flex: `0 0 ${columnWidth}`,
+                      width: columnWidth,
+                    }}
+                  >
+                    <div className="flex items-center gap-2" dir="rtl">
+                      <span className="flex-1 truncate">{column.title}</span>
+                      {column.sortable && (
+                        <button
+                          onClick={() => handleSort(column.dataIndex)}
+                          className="text-gray-400 hover:text-gray-600 flex-shrink-0"
+                        >
+                          {sortConfig?.key === column.dataIndex
+                            ? sortConfig.direction === "asc"
+                              ? "↑"
+                              : "↓"
+                            : "↕"}
+                        </button>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
               {shouldShowActionColumn(actions) && (
                 <div
                   className={`px-4 py-3 text-center font-medium text-text-700 flex-shrink-0 ${getActionColumnResponsiveClasses(actions)}`}
