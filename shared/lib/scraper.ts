@@ -54,8 +54,6 @@ export async function scrapeCryptoData(url: string): Promise<CryptoCurrency[]> {
       });
     });
 
-    console.log(" ---> len: ", cryptoData.length);
-
     return cryptoData;
   } catch (error: any) {
     console.error("Failed to scrape crypto data:", error);

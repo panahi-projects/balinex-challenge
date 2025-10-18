@@ -3,38 +3,17 @@ import Link from "next/link";
 const Navbar = () => {
   const links = [
     {
-      id: "buy-crypto",
-      label: "خرید رمز ارزها",
-      name: "buy-crypto",
-      href: "/buy-crypto",
+      id: "crypto-list",
+      label: "لیست رمز ارزها",
+      name: "crypto-list",
+      href: "/",
       children: [],
     },
     {
-      id: "crypto-price",
-      label: "قیمت رمز ارزها",
-      name: "crypto-price",
-      href: "/crypto-price",
-      children: [],
-    },
-    {
-      id: "market",
-      label: "بازار معاملاتی",
-      name: "market",
-      href: "/market",
-      children: [],
-    },
-    {
-      id: "blog",
-      label: "مجله بالینکس",
-      name: "blog",
-      href: "/blog",
-      children: [],
-    },
-    {
-      id: "about",
-      label: "درباره ما",
-      name: "about",
-      href: "/about",
+      id: "new-crypto",
+      label: "افزودن رمز ارز جدید",
+      name: "new-crypto",
+      href: "/crypto/new",
       children: [],
     },
   ];

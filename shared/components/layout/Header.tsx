@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Logo } from "@/shared";
 import Navbar from "./Navbar";
 import Authentication from "./Authentication";
+import Link from "next/link";
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -16,8 +17,10 @@ const Header = () => {
       <div className="container-fluid">
         <div className="flex flex-row items-center justify-between gap-4 py-6">
           {/* Logo */}
-          <div className="flex-shrink-0">
-            <Logo />
+          <div className="flex-shrink-0 ml-6">
+            <Link href="/">
+              <Logo />
+            </Link>
           </div>
 
           {/* Desktop Navigation */}

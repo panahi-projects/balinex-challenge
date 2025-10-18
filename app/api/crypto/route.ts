@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { cryptoPriorityAPI } from "@/features/crypto-list/services/cryptoAPI";
 import { getValidCoinLogoAsync } from "@/shared/lib/coin-logo";
+import { cryptoStorage } from "@/shared/lib/crypto-storage";
 
 export async function GET(req: Request) {
   try {
@@ -29,10 +30,27 @@ export async function GET(req: Request) {
       })
     );
 
+    // Get custom cryptos and transform them to match CryptoCurrency format
+    const customCryptos = cryptoStorage.getAllCustomCryptos();
+    const transformedCustomCryptos = customCryptos.map((crypto) => ({
+      id: crypto.id,
+      rank: crypto.marketCapRank.toString(),
+      name: crypto.name,
+      symbol: crypto.symbol,
+      price: crypto.currentPrice,
+      image: crypto.image,
+      change24h: crypto.priceChangePercentage24h,
+      volume24h: crypto.totalVolume,
+      marketCap: crypto.marketCap,
+    }));
+
+    const allData = [...transformedCustomCryptos, ...dataWithValidatedLogos];
+
     return NextResponse.json({
       success: true,
-      data: dataWithValidatedLogos,
+      data: allData,
       source: result.source,
+      customCount: customCryptos.length,
       timestamp: result.timestamp,
     });
   } catch (error: unknown) {
