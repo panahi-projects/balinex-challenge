@@ -55,65 +55,63 @@ const CoinDetails = ({
   }
 
   return (
-    <Card>
-      <div className="p-4">
-        {/* Header */}
-        <div className="flex items-center gap-3 mb-4">
-          <Image
-            src={data.image}
-            alt={data.name}
-            width={64}
-            height={64}
-            className="w-12 h-12 rounded-full"
-          />
-          <div>
-            <h2 className="text-lg font-bold">{data.name}</h2>
-            <p className="text-gray-500">{data.symbol}</p>
-          </div>
-        </div>
-
-        {/* Price Info */}
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <p className="text-sm text-gray-500">قیمت فعلی</p>
-            <p className="text-xl font-bold farsi-number">
-              ${formatPrice(data.currentPrice)}
-            </p>
-          </div>
-          <div>
-            <p className="text-sm text-gray-500">تغییر 24 ساعته</p>
-            <p
-              className={`text-lg font-bold farsi-number ${
-                data.priceChangePercentage24h.startsWith("-")
-                  ? "text-red-500"
-                  : "text-green-500"
-              }`}
-            >
-              {data.priceChangePercentage24h}
-            </p>
-          </div>
-          <div>
-            <p className="text-sm text-gray-500">ارزش بازار</p>
-            <p className="text-lg font-semibold farsi-number">
-              ${data.marketCap}
-            </p>
-          </div>
-          <div>
-            <p className="text-sm text-gray-500">حجم معاملات (24h)</p>
-            <p className="text-lg font-semibold farsi-number">
-              ${data.totalVolume}
-            </p>
-          </div>
-        </div>
-
-        {/* Rank */}
-        <div className="mt-4 text-center">
-          <span className="text-sm text-gray-400">
-            رده <span className="farsi-number">{data.marketCapRank}</span>#
-          </span>
+    <div className="p-4">
+      {/* Header */}
+      <div className="flex items-center gap-3 mb-4">
+        <Image
+          src={data.image}
+          alt={data.name}
+          width={64}
+          height={64}
+          className="w-12 h-12 rounded-full"
+        />
+        <div>
+          <h2 className="text-lg font-bold">{data.name}</h2>
+          <p className="text-gray-500">{data.symbol}</p>
         </div>
       </div>
-    </Card>
+
+      {/* Price Info */}
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <p className="text-sm text-gray-500">قیمت فعلی</p>
+          <p className="text-xl font-bold farsi-number">
+            ${formatPrice(data.currentPrice)}
+          </p>
+        </div>
+        <div>
+          <p className="text-sm text-gray-500">تغییر 24 ساعته</p>
+          <p
+            className={`text-lg font-bold farsi-number ${
+              data.priceChangePercentage24h.startsWith("-")
+                ? "text-red-500"
+                : "text-green-500"
+            }`}
+          >
+            {data.priceChangePercentage24h}
+          </p>
+        </div>
+        <div>
+          <p className="text-sm text-gray-500">ارزش بازار</p>
+          <p className="text-lg font-semibold farsi-number">
+            ${data.marketCap}
+          </p>
+        </div>
+        <div>
+          <p className="text-sm text-gray-500">حجم معاملات (24h)</p>
+          <p className="text-lg font-semibold farsi-number">
+            ${data.totalVolume}
+          </p>
+        </div>
+      </div>
+
+      {/* Rank */}
+      <div className="mt-4 text-center">
+        <span className="text-sm text-gray-400">
+          رده <span className="farsi-number">{data.marketCapRank}</span>#
+        </span>
+      </div>
+    </div>
   );
 };
 

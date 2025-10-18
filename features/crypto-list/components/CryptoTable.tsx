@@ -8,6 +8,7 @@ import CryptoPercentChange from "./CryptoPercentChange";
 import ViewMoreButton from "./ViewMoreButton";
 import { useEffect, useState } from "react";
 import { useCryptoData } from "../hooks";
+import { useRouter } from "next/navigation";
 
 const CryptoTable = () => {
   const {
@@ -26,6 +27,7 @@ const CryptoTable = () => {
     refetchInterval: 60000, // 60 seconds
   });
   const [data, setData] = useState<Crypto[]>([]);
+  const router = useRouter();
 
   const columns: Column<CryptoCurrency>[] = [
     {
@@ -130,7 +132,7 @@ const CryptoTable = () => {
       size: "small",
       width: "200px",
       onClick: (record) => {
-        console.log(record);
+        router.push(`/crypto/details/${record.symbol}`);
       },
       responsive: {
         mobile: false,
@@ -159,13 +161,15 @@ const CryptoTable = () => {
   }, [cryptoData]);
 
   if (loading) {
-    return <div>Loading cryptocurrency data...</div>;
+    return (
+      <div className="text-center py-8 w-full">در حال دریافت اطلاعات...</div>
+    );
   }
   if (error) {
     return (
       <div>
-        <div>Error: {error}</div>
-        <button onClick={refetch}>Retry</button>
+        <div>خطا: {error}</div>
+        <button onClick={refetch}>تلاش مجدد</button>
       </div>
     );
   }
