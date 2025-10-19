@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { cryptoStorage } from "@/shared/lib/crypto-storage";
 import { NewCryptoFormSchema } from "@/shared/schemas";
+import { revalidateTag } from "next/cache";
 
 export async function POST(req: Request) {
   try {
@@ -47,6 +48,10 @@ export async function POST(req: Request) {
 
     // Store the new crypto
     cryptoStorage.addCrypto(cryptoData);
+
+    // Revalidate the crypto data cache to show the new item immediately
+    revalidateTag("crypto-data");
+
     return NextResponse.json({
       success: true,
       data: cryptoData,

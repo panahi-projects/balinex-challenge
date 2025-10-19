@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { cryptoNewAPI } from "../services/cryptoNewAPI";
 import { NewCryptoFormData, NewCryptoResponse } from "../types";
+import { useRouter } from "next/navigation";
 
 interface UseCryptoNewReturn {
   createCrypto: (data: NewCryptoFormData) => Promise<NewCryptoResponse>;
@@ -12,6 +13,7 @@ interface UseCryptoNewReturn {
 export function useCryptoNew(): UseCryptoNewReturn {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   const createCrypto = async (
     data: NewCryptoFormData
@@ -24,6 +26,9 @@ export function useCryptoNew(): UseCryptoNewReturn {
 
       if (!response.success) {
         setError(response.error || "Failed to create cryptocurrency");
+      } else {
+        // Force a hard refresh to get the latest data from server
+        router.refresh();
       }
 
       return response;

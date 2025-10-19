@@ -1,8 +1,8 @@
-import { CryptoTable } from "@/features/crypto-list/components";
 import {
+  CryptoTable,
   fetchCryptoDataServer,
   cryptoCacheConfig,
-} from "@/shared/lib/crypto-server";
+} from "@/features/crypto-list";
 import { Suspense } from "react";
 
 export const revalidate = cryptoCacheConfig.revalidate;

@@ -1,4 +1,4 @@
-import { cryptoPriorityAPI } from "@/features/crypto-list/services/cryptoAPI";
+import { cryptoPriorityAPI } from "./crypto-priority-instance";
 import { getValidCoinLogoAsync } from "@/shared/lib/coin-logo";
 import { cryptoStorage } from "@/shared/lib/crypto-storage";
 import { CryptoCurrency } from "@/shared";

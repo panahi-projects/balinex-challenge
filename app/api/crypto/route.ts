@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { cryptoPriorityAPI } from "@/features/crypto-list/services/cryptoAPI";
+import { cryptoPriorityAPI } from "@/features/crypto-list";
 import { getValidCoinLogoAsync } from "@/shared/lib/coin-logo";
 import { cryptoStorage } from "@/shared/lib/crypto-storage";
 
@@ -61,6 +61,9 @@ export async function GET(req: Request) {
     );
     response.headers.set("CDN-Cache-Control", "max-age=60");
     response.headers.set("Vercel-CDN-Cache-Control", "max-age=60");
+
+    // Add revalidation tag for cache invalidation
+    response.headers.set("Cache-Tags", "crypto-data");
 
     return response;
   } catch (error: unknown) {

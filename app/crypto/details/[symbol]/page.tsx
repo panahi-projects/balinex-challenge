@@ -1,10 +1,10 @@
-import { CoinDetails } from "@/features/crypto-details/components";
-import { Card } from "@/shared";
-import BackButton from "@/shared/components/BackButton";
 import {
+  CoinDetails,
   fetchCryptoDetailsServer,
   cryptoDetailsCacheConfig,
-} from "@/shared/lib/crypto-details-server";
+} from "@/features/crypto-details";
+import { Card } from "@/shared";
+import BackButton from "@/shared/components/BackButton";
 import { Suspense } from "react";
 
 export const revalidate = cryptoDetailsCacheConfig.revalidate;

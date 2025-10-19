@@ -7,7 +7,10 @@ const NewCryptoPage = () => {
 
   const handleSuccess = (data: any) => {
     console.log("New crypto created:", data);
-    router.push("/");
+    // Small delay to ensure cache revalidation completes
+    setTimeout(() => {
+      router.push("/");
+    }, 100);
   };
 
   const handleCancel = () => {

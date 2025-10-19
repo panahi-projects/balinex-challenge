@@ -1,10 +1,14 @@
-import { CryptoPriorityAPI } from "./priority-api";
-import { BaseAPI, CryptoCurrency, scrapeCryptoData } from "./index";
 import { NormalizerFactory } from "@/features/crypto-list/normalizers";
 import {
   CoinGeckoCryptoData,
   ScrapedCryptoData,
 } from "@/features/crypto-list/types";
+import {
+  BaseAPI,
+  CryptoCurrency,
+  CryptoPriorityAPI,
+  scrapeCryptoData,
+} from "@/shared";
 
 interface CryptoMarketParams {
   vs_currency: string;

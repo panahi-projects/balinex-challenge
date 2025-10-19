@@ -1,8 +1,5 @@
-import { coinDetailsAPI } from "@/features/crypto-details/services/coinDetailsAPI";
-import {
-  CoinDetailsType,
-  CoinDetailsResponse,
-} from "@/features/crypto-details/types";
+import { coinDetailsAPI } from "./coinDetailsAPI";
+import { CoinDetailsType, CoinDetailsResponse } from "../types";
 
 interface CryptoDetailsServerParams {
   symbol: string;

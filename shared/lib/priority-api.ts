@@ -1,28 +1,4 @@
-import BaseAPI from "./base-api";
 import { CryptoCurrency } from "./scraper";
-
-// interface CryptoCoin {
-//   id: string;
-//   symbol: string;
-//   name: string;
-//   image: string;
-//   current_price: number;
-//   market_cap: number;
-//   market_cap_rank: number;
-//   total_volume: number;
-//   high_24h: number;
-//   low_24h: number;
-//   price_change_24h: number;
-//   price_change_percentage_24h: number;
-//   circulating_supply: number;
-//   total_supply: number | null;
-//   max_supply: number | null;
-//   ath: number;
-//   ath_change_percentage: number;
-//   atl: number;
-//   atl_change_percentage: number;
-//   last_updated: string;
-// }
 
 interface CryptoMarketParams {
   vs_currency: string;
@@ -110,47 +86,3 @@ export class CryptoPriorityAPI {
     return Promise.race([promise, timeoutPromise]);
   }
 }
-
-// const cryptoPriorityAPI = new CryptoPriorityAPI();
-
-// Primary: CoinGecko API
-// cryptoPriorityAPI.addEndpoint({
-//   name: "CoinGecko",
-//   priority: 1,
-//   timeout: 8000,
-//   handler: async (params: CryptoMarketParams) => {
-//     const COINGECKO_API_BASE_URL = "https://api.coingecko.com/api/v3";
-//     const api = BaseAPI.getInstance(COINGECKO_API_BASE_URL);
-
-//     return api.get<CryptoCoin[]>(
-//       "coins/markets",
-//       params as Record<string, string | number>
-//     );
-//   },
-// });
-
-// Secondary: Scraping API Fallback
-// cryptoPriorityAPI.addEndpoint({
-//   name: "Scraping-Fallback",
-//   priority: 2,
-//   timeout: 15000,
-//   handler: async (params: CryptoMarketParams) => {
-//     // Convert params to query string for your scraping API if needed
-//     const queryParams = new URLSearchParams();
-//     Object.entries(params).forEach(([key, value]) => {
-//       if (value !== undefined && value !== null) {
-//         queryParams.append(key, String(value));
-//       }
-//     });
-
-//     const response = await fetch(
-//       `/api/crypto/scrape?${queryParams.toString()}`
-//     );
-
-//     if (!response.ok) {
-//       throw new Error(`Scraping API failed with status: ${response.status}`);
-//     }
-
-//     return response.json();
-//   },
-// });
