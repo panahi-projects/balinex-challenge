@@ -18,8 +18,15 @@ const CoinDetails = ({
   if (loading) {
     return (
       <Card>
-        <div className="flex justify-center items-center py-8">
-          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+        <div
+          className="flex justify-center items-center py-8"
+          role="status"
+          aria-live="polite"
+        >
+          <div
+            className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"
+            aria-hidden="true"
+          ></div>
           <span className="mr-2">در حال دریافت اطلاعات...</span>
         </div>
       </Card>
@@ -29,11 +36,12 @@ const CoinDetails = ({
   if (error) {
     return (
       <Card>
-        <div className="text-center py-4">
+        <div className="text-center py-4" role="alert" aria-live="assertive">
           <div className="text-red-500 mb-2">خطا: {error}</div>
           <button
             onClick={refetch}
-            className="px-3 py-1 bg-primary text-white rounded text-sm hover:bg-primary-600"
+            className="px-3 py-1 bg-primary text-white rounded text-sm hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+            aria-label="Retry loading coin details"
           >
             تلاش مجدد
           </button>

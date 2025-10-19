@@ -59,7 +59,12 @@ const NewCryptoForm = ({ onSuccess, onCancel }: NewCryptoFormProps) => {
       <div className="p-6">
         <h2 className="text-2xl font-bold mb-6">افزودن رمز ارز جدید</h2>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="space-y-6"
+          role="form"
+          aria-label="Add new cryptocurrency form"
+        >
           {/* Name Field */}
           <div>
             <label
@@ -74,9 +79,17 @@ const NewCryptoForm = ({ onSuccess, onCancel }: NewCryptoFormProps) => {
               id="name"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
               placeholder="e.g., Bitcoin"
+              aria-describedby={errors.name ? "name-error" : undefined}
+              aria-invalid={!!errors.name}
             />
             {errors.name && (
-              <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
+              <p
+                id="name-error"
+                className="mt-1 text-sm text-red-600"
+                role="alert"
+              >
+                {errors.name.message}
+              </p>
             )}
           </div>
 
@@ -94,9 +107,15 @@ const NewCryptoForm = ({ onSuccess, onCancel }: NewCryptoFormProps) => {
               id="symbol"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
               placeholder="e.g., BTC"
+              aria-describedby={errors.symbol ? "symbol-error" : undefined}
+              aria-invalid={!!errors.symbol}
             />
             {errors.symbol && (
-              <p className="mt-1 text-sm text-red-600">
+              <p
+                id="symbol-error"
+                className="mt-1 text-sm text-red-600"
+                role="alert"
+              >
                 {errors.symbol.message}
               </p>
             )}
@@ -110,6 +129,24 @@ const NewCryptoForm = ({ onSuccess, onCancel }: NewCryptoFormProps) => {
             >
               آدرس تصویر
             </label>
+            <input
+              {...register("image")}
+              type="url"
+              id="image"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+              placeholder="https://example.com/bitcoin.png"
+              aria-describedby={errors.image ? "image-error" : undefined}
+              aria-invalid={!!errors.image}
+            />
+            {errors.image && (
+              <p
+                id="image-error"
+                className="mt-1 text-sm text-red-600"
+                role="alert"
+              >
+                {errors.image.message}
+              </p>
+            )}
           </div>
 
           {/* Description Field */}
@@ -126,9 +163,17 @@ const NewCryptoForm = ({ onSuccess, onCancel }: NewCryptoFormProps) => {
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
               placeholder="توضیحات کوتاه در مورد رمز ارز"
+              aria-describedby={
+                errors.description ? "description-error" : undefined
+              }
+              aria-invalid={!!errors.description}
             />
             {errors.description && (
-              <p className="mt-1 text-sm text-red-600">
+              <p
+                id="description-error"
+                className="mt-1 text-sm text-red-600"
+                role="alert"
+              >
                 {errors.description.message}
               </p>
             )}
@@ -148,9 +193,15 @@ const NewCryptoForm = ({ onSuccess, onCancel }: NewCryptoFormProps) => {
               id="website"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
               placeholder="https://example.com"
+              aria-describedby={errors.website ? "website-error" : undefined}
+              aria-invalid={!!errors.website}
             />
             {errors.website && (
-              <p className="mt-1 text-sm text-red-600">
+              <p
+                id="website-error"
+                className="mt-1 text-sm text-red-600"
+                role="alert"
+              >
                 {errors.website.message}
               </p>
             )}
@@ -170,9 +221,15 @@ const NewCryptoForm = ({ onSuccess, onCancel }: NewCryptoFormProps) => {
               id="twitter"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
               placeholder="https://twitter.com/example"
+              aria-describedby={errors.twitter ? "twitter-error" : undefined}
+              aria-invalid={!!errors.twitter}
             />
             {errors.twitter && (
-              <p className="mt-1 text-sm text-red-600">
+              <p
+                id="twitter-error"
+                className="mt-1 text-sm text-red-600"
+                role="alert"
+              >
                 {errors.twitter.message}
               </p>
             )}
@@ -192,9 +249,15 @@ const NewCryptoForm = ({ onSuccess, onCancel }: NewCryptoFormProps) => {
               id="github"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
               placeholder="https://github.com/example"
+              aria-describedby={errors.github ? "github-error" : undefined}
+              aria-invalid={!!errors.github}
             />
             {errors.github && (
-              <p className="mt-1 text-sm text-red-600">
+              <p
+                id="github-error"
+                className="mt-1 text-sm text-red-600"
+                role="alert"
+              >
                 {errors.github.message}
               </p>
             )}
@@ -202,7 +265,11 @@ const NewCryptoForm = ({ onSuccess, onCancel }: NewCryptoFormProps) => {
 
           {/* Error Display */}
           {(error || submitError) && (
-            <div className="p-4 bg-red-50 border border-red-200 rounded-md">
+            <div
+              className="p-4 bg-red-50 border border-red-200 rounded-md"
+              role="alert"
+              aria-live="assertive"
+            >
               <p className="text-sm text-red-600">{submitError || error}</p>
             </div>
           )}
@@ -215,6 +282,11 @@ const NewCryptoForm = ({ onSuccess, onCancel }: NewCryptoFormProps) => {
               variant="primary"
               disabled={loading}
               className="flex-1 px-4 py-2"
+              aria-label={
+                loading
+                  ? "Creating cryptocurrency, please wait"
+                  : "Create new cryptocurrency"
+              }
             >
               {loading ? "در حال ایجاد..." : "ایجاد رمز ارز"}
             </Button>

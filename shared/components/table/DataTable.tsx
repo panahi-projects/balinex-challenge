@@ -208,6 +208,7 @@ const DataTable = <T extends Record<string, any>>({
                     flex: "0 0 120px",
                     minWidth: "120px",
                   }}
+                  role="columnheader"
                 >
                   <span className="truncate">{actionColumnTitle}</span>
                 </div>
@@ -324,21 +325,37 @@ const DataTable = <T extends Record<string, any>>({
 
   return (
     <DataTableProvider value={contextValue}>
-      <div className={`overflow-x-auto ${className}`}>
+      <div
+        className={`overflow-x-auto ${className}`}
+        role="region"
+        aria-label="Data table"
+      >
         <div className="min-w-full space-y-4">
           <div className="w-full">
             <DataTableSearch />
           </div>
           {/* Header */}
-          <div className="bg-background-50 border-b border-gray-200 rounded-t-lg min-w-max">
-            <div className="flex items-center justify-between" dir="rtl">
+          <div
+            className="bg-background-50 border-b border-gray-200 rounded-t-lg min-w-max"
+            role="rowgroup"
+          >
+            <div
+              className="flex items-center justify-between"
+              dir="rtl"
+              role="row"
+            >
               {selectable && (
-                <div className="px-4 py-3 w-12 flex-shrink-0 flex items-center justify-center">
+                <div
+                  className="px-4 py-3 w-12 flex-shrink-0 flex items-center justify-center"
+                  role="columnheader"
+                >
                   <input
                     type="checkbox"
                     checked={isAllSelected}
                     onChange={(e) => handleSelectAll(e.target.checked)}
                     className="rounded border-gray-300 text-primary focus:ring-primary"
+                    aria-label="Select all rows"
+                    title="Select all rows"
                   />
                 </div>
               )}
@@ -367,13 +384,25 @@ const DataTable = <T extends Record<string, any>>({
                       flex: `0 0 ${columnWidth}`,
                       width: columnWidth,
                     }}
+                    role="columnheader"
+                    aria-sort={
+                      column.sortable
+                        ? sortConfig?.key === column.dataIndex
+                          ? sortConfig.direction === "asc"
+                            ? "ascending"
+                            : "descending"
+                          : "none"
+                        : undefined
+                    }
                   >
                     <div className="flex items-center gap-2" dir="rtl">
                       <span className="flex-1 truncate">{column.title}</span>
                       {column.sortable && (
                         <button
                           onClick={() => handleSort(column.dataIndex)}
-                          className="text-gray-400 hover:text-gray-600 flex-shrink-0"
+                          className="text-gray-400 hover:text-gray-600 flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-primary rounded"
+                          aria-label={`Sort by ${column.title} ${sortConfig?.key === column.dataIndex ? (sortConfig.direction === "asc" ? "ascending" : "descending") : ""}`}
+                          title={`Sort by ${column.title}`}
                         >
                           {sortConfig?.key === column.dataIndex
                             ? sortConfig.direction === "asc"
@@ -393,6 +422,7 @@ const DataTable = <T extends Record<string, any>>({
                     flex: "0 0 120px",
                     minWidth: "120px",
                   }}
+                  role="columnheader"
                 >
                   <span className="truncate">{actionColumnTitle}</span>
                 </div>

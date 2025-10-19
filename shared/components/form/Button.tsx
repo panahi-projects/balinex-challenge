@@ -7,6 +7,8 @@ interface ButtonProps {
   variant?: "primary" | "secondary" | "info" | "success" | "danger";
   size?: "small" | "medium" | "large";
   outline?: boolean;
+  "aria-label"?: string;
+  "aria-describedby"?: string;
 }
 
 const Button = ({
@@ -18,6 +20,8 @@ const Button = ({
   variant,
   size,
   outline,
+  "aria-label": ariaLabel,
+  "aria-describedby": ariaDescribedby,
 }: ButtonProps) => {
   const variantClass =
     variant === "primary"
@@ -35,7 +39,7 @@ const Button = ({
     ? "border border-primary-500 text-primary-500"
     : "";
 
-  const defaultClasses = `rounded-md ${size === "small" ? "px-2 py-1" : size === "medium" ? "px-4 py-1" : "px-6 py-3"}`;
+  const defaultClasses = `rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${size === "small" ? "px-2 py-1" : size === "medium" ? "px-4 py-1" : "px-6 py-3"}`;
   const classes = `${defaultClasses} ${className} ${variantClass} ${sizeClass} ${outlineClass}`;
   return (
     <div className="flex flex-row gap-2">
@@ -44,6 +48,8 @@ const Button = ({
         className={classes}
         type={type}
         disabled={disabled}
+        aria-label={ariaLabel}
+        aria-describedby={ariaDescribedby}
       >
         {children}
       </button>

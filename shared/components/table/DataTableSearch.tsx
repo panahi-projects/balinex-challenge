@@ -18,7 +18,11 @@ const DataTableSearch = () => {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         placeholder="جستجوی نام یا نماد"
-        icon={<SearchIcon className="w-6 h-6 text-text-200" />}
+        icon={
+          <SearchIcon className="w-6 h-6 text-text-200" aria-hidden="true" />
+        }
+        aria-label="Search cryptocurrencies"
+        role="searchbox"
       />
     </div>
   );
