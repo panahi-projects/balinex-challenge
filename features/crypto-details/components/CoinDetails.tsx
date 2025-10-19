@@ -6,15 +6,23 @@ import { Card, formatPrice } from "@/shared";
 interface SimpleCoinDetailsProps {
   symbol: string;
   vsCurrency?: string;
+  initialData?: {
+    data: any | null;
+    success: boolean;
+    error?: string;
+    timestamp: number;
+  };
 }
 
 const CoinDetails = ({
   symbol,
   vsCurrency = "usd",
+  initialData,
 }: SimpleCoinDetailsProps) => {
   const { data, loading, error, refetch } = useCoinDetails({
     symbol,
     vsCurrency,
+    initialData,
   });
 
   if (loading) {

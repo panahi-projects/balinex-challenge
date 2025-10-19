@@ -7,6 +7,12 @@ interface UseCoinDetailsProps {
   symbol: string;
   vsCurrency?: string;
   enabled?: boolean;
+  initialData?: {
+    data: any | null;
+    success: boolean;
+    error?: string;
+    timestamp: number;
+  };
 }
 
 interface UseCoinDetailsReturn {
@@ -21,11 +27,16 @@ export function useCoinDetails({
   symbol,
   vsCurrency = "usd",
   enabled = true,
+  initialData,
 }: UseCoinDetailsProps): UseCoinDetailsReturn {
-  const [data, setData] = useState<CoinDetailsType | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [lastUpdated, setLastUpdated] = useState<number | null>(null);
+  const [data, setData] = useState<CoinDetailsType | null>(
+    initialData?.data || null
+  );
+  const [loading, setLoading] = useState(!initialData?.success && enabled);
+  const [error, setError] = useState<string | null>(initialData?.error || null);
+  const [lastUpdated, setLastUpdated] = useState<number | null>(
+    initialData?.timestamp || null
+  );
 
   const fetchCoinDetails = useCallback(async () => {
     if (!enabled || !symbol) return;
@@ -57,8 +68,11 @@ export function useCoinDetails({
 
   // Fetch data on mount and when dependencies change
   useEffect(() => {
-    fetchCoinDetails();
-  }, [fetchCoinDetails]);
+    // Only fetch if we don't have initial data or if initial data failed
+    if (!initialData?.success) {
+      fetchCoinDetails();
+    }
+  }, [fetchCoinDetails, initialData?.success]);
 
   const refetch = useCallback(() => {
     fetchCoinDetails();

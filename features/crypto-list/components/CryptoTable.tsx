@@ -10,7 +10,18 @@ import { useEffect, useState } from "react";
 import { useCryptoData } from "../hooks";
 import { useRouter } from "next/navigation";
 
-const CryptoTable = () => {
+interface CryptoTableProps {
+  initialData?: {
+    data: CryptoCurrency[];
+    source: string;
+    customCount: number;
+    timestamp: number;
+    success: boolean;
+    error?: string;
+  };
+}
+
+const CryptoTable = ({ initialData }: CryptoTableProps) => {
   const {
     data: cryptoData,
     loading,
@@ -25,6 +36,7 @@ const CryptoTable = () => {
   } = useCryptoData({
     per_page: 20,
     refetchInterval: 60000, // 60 seconds
+    initialData,
   });
   const [data, setData] = useState<Crypto[]>([]);
   const router = useRouter();

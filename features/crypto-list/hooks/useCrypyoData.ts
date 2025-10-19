@@ -7,6 +7,14 @@ interface UseCryptoDataProps {
   order?: string;
   per_page?: number;
   refetchInterval?: number;
+  initialData?: {
+    data: CryptoCurrency[];
+    source: string;
+    customCount: number;
+    timestamp: number;
+    success: boolean;
+    error?: string;
+  };
 }
 
 interface UseCryptoDataReturn {
@@ -28,20 +36,27 @@ export function useCryptoData({
   order = "market_cap_desc",
   per_page = 10,
   refetchInterval = 60000, // 1 minute
+  initialData,
 }: UseCryptoDataProps = {}): UseCryptoDataReturn {
-  const [data, setData] = useState<CryptoCurrency[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<CryptoCurrency[]>(initialData?.data || []);
+  const [loading, setLoading] = useState(!initialData?.success);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [source, setSource] = useState<string | null>(null);
-  const [lastUpdated, setLastUpdated] = useState<number | null>(null);
+  const [error, setError] = useState<string | null>(initialData?.error || null);
+  const [source, setSource] = useState<string | null>(
+    initialData?.source || null
+  );
+  const [lastUpdated, setLastUpdated] = useState<number | null>(
+    initialData?.timestamp || null
+  );
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const [totalLoaded, setTotalLoaded] = useState(0);
+  const [totalLoaded, setTotalLoaded] = useState(
+    initialData?.data?.length || 0
+  );
 
   // Ref to store the latest data for background updates
-  const dataRef = useRef<CryptoCurrency[]>([]);
+  const dataRef = useRef<CryptoCurrency[]>(initialData?.data || []);
   const currentPageRef = useRef(1);
   const hasMoreRef = useRef(true);
 
@@ -237,7 +252,10 @@ export function useCryptoData({
   }, [vs_currency, order, per_page, fetchData]);
 
   useEffect(() => {
-    fetchData(1, true, false); // Initial load
+    // Only fetch if we don't have initial data or if initial data failed
+    if (!initialData?.success) {
+      fetchData(1, true, false); // Initial load
+    }
 
     if (refetchInterval > 0) {
       const interval = setInterval(() => {
@@ -253,6 +271,7 @@ export function useCryptoData({
     refetchInterval,
     fetchData,
     refreshAllLoadedPages,
+    initialData?.success,
   ]);
 
   return {
