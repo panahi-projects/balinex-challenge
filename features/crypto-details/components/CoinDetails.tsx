@@ -2,23 +2,13 @@
 import Image from "next/image";
 import { useCoinDetails } from "../hooks";
 import { Card, formatPrice } from "@/shared";
-
-interface SimpleCoinDetailsProps {
-  symbol: string;
-  vsCurrency?: string;
-  initialData?: {
-    data: any | null;
-    success: boolean;
-    error?: string;
-    timestamp: number;
-  };
-}
+import { CoinDetailsProps } from "../types";
 
 const CoinDetails = ({
   symbol,
   vsCurrency = "usd",
   initialData,
-}: SimpleCoinDetailsProps) => {
+}: CoinDetailsProps) => {
   const { data, loading, error, refetch } = useCoinDetails({
     symbol,
     vsCurrency,

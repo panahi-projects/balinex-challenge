@@ -1,25 +1,14 @@
 "use client";
-import { Card, DataTable } from "@/shared";
 import type { ActionButton, Column, CryptoCurrency } from "@/shared";
-import type { Crypto } from "../types";
-import CryptoName from "./CryptoName";
+import { Card, DataTable } from "@/shared";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { CryptoTableColumns } from "../constants";
+import { useCryptoData } from "../hooks";
+import type { Crypto, CryptoTableProps } from "../types";
+import CryptoName from "./CryptoName";
 import CryptoPercentChange from "./CryptoPercentChange";
 import ViewMoreButton from "./ViewMoreButton";
-import { useEffect, useState } from "react";
-import { useCryptoData } from "../hooks";
-import { useRouter } from "next/navigation";
-
-interface CryptoTableProps {
-  initialData?: {
-    data: CryptoCurrency[];
-    source: string;
-    customCount: number;
-    timestamp: number;
-    success: boolean;
-    error?: string;
-  };
-}
 
 const CryptoTable = ({ initialData }: CryptoTableProps) => {
   const {

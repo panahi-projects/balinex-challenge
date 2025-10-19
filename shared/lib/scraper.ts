@@ -1,18 +1,7 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
 import { randomUUID } from "crypto";
-
-export interface CryptoCurrency {
-  id: string;
-  rank: string;
-  name: string;
-  symbol: string;
-  price: string;
-  change24h: string;
-  image?: string;
-  volume24h: string;
-  marketCap?: string;
-}
+import type { CryptoCurrency } from "../types";
 
 export async function scrapeCryptoData(url: string): Promise<CryptoCurrency[]> {
   try {

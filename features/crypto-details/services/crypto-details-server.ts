@@ -1,17 +1,9 @@
+import type {
+  CoinDetailsResponse,
+  CryptoDetailsServerParams,
+  CryptoDetailsServerResponse,
+} from "../types";
 import { coinDetailsAPI } from "./coinDetailsAPI";
-import { CoinDetailsType, CoinDetailsResponse } from "../types";
-
-interface CryptoDetailsServerParams {
-  symbol: string;
-  vsCurrency?: string;
-}
-
-interface CryptoDetailsServerResponse {
-  data: CoinDetailsType | null;
-  success: boolean;
-  error?: string;
-  timestamp: number;
-}
 
 export async function fetchCryptoDetailsServer({
   symbol,

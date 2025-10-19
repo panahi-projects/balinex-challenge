@@ -1,13 +1,6 @@
 import { Button } from "@/shared";
 import { Loader2 } from "lucide-react";
-
-interface ViewMoreButtonProps {
-  onClick: () => void;
-  isLoading: boolean;
-  hasMore: boolean;
-  totalLoaded: number;
-  className?: string;
-}
+import type { ViewMoreButtonProps } from "../types";
 
 const ViewMoreButton = ({
   onClick,

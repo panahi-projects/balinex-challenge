@@ -1,34 +1,6 @@
 import { CryptoCurrency } from "@/shared";
-import { useState, useEffect, useCallback, useRef } from "react";
-
-interface UseCryptoDataProps {
-  vs_currency?: string;
-  order?: string;
-  per_page?: number;
-  refetchInterval?: number;
-  initialData?: {
-    data: CryptoCurrency[];
-    source: string;
-    customCount: number;
-    timestamp: number;
-    success: boolean;
-    error?: string;
-  };
-}
-
-interface UseCryptoDataReturn {
-  data: CryptoCurrency[];
-  loading: boolean;
-  error: string | null;
-  source: string | null;
-  lastUpdated: number | null;
-  refetch: () => void;
-  isRefreshing: boolean;
-  loadMore: () => Promise<void>;
-  hasMore: boolean;
-  isLoadingMore: boolean;
-  totalLoaded: number;
-}
+import { useCallback, useEffect, useRef, useState } from "react";
+import type { UseCryptoDataProps, UseCryptoDataReturn } from "../types";
 
 export function useCryptoData({
   vs_currency = "usd",

@@ -1,23 +1,7 @@
-import { cryptoPriorityAPI } from "./crypto-priority-instance";
 import { getValidCoinLogoAsync } from "@/shared/lib/coin-logo";
 import { cryptoStorage } from "@/shared/lib/crypto-storage";
-import { CryptoCurrency } from "@/shared";
-
-interface CryptoServerParams {
-  vs_currency?: string;
-  order?: string;
-  per_page?: number;
-  page?: number;
-}
-
-interface CryptoServerResponse {
-  data: CryptoCurrency[];
-  source: string;
-  customCount: number;
-  timestamp: number;
-  success: boolean;
-  error?: string;
-}
+import type { CryptoServerParams, CryptoServerResponse } from "../types";
+import { cryptoPriorityAPI } from "./crypto-priority-instance";
 
 export async function fetchCryptoDataServer({
   vs_currency = "usd",

@@ -1,14 +1,12 @@
 "use client";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { cryptoNewAPI } from "../services/cryptoNewAPI";
-import { NewCryptoFormData, NewCryptoResponse } from "../types";
-import { useRouter } from "next/navigation";
-
-interface UseCryptoNewReturn {
-  createCrypto: (data: NewCryptoFormData) => Promise<NewCryptoResponse>;
-  loading: boolean;
-  error: string | null;
-}
+import type {
+  NewCryptoFormData,
+  NewCryptoResponse,
+  UseCryptoNewReturn,
+} from "../types";
 
 export function useCryptoNew(): UseCryptoNewReturn {
   const [loading, setLoading] = useState(false);

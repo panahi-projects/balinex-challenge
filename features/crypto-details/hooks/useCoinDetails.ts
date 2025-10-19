@@ -1,27 +1,12 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
 import { coinDetailsAPI } from "../services/coinDetailsAPI";
-import { type CoinDetailsType, type CoinDetailsResponse } from "../types";
-
-interface UseCoinDetailsProps {
-  symbol: string;
-  vsCurrency?: string;
-  enabled?: boolean;
-  initialData?: {
-    data: any | null;
-    success: boolean;
-    error?: string;
-    timestamp: number;
-  };
-}
-
-interface UseCoinDetailsReturn {
-  data: CoinDetailsType | null;
-  loading: boolean;
-  error: string | null;
-  refetch: () => void;
-  lastUpdated: number | null;
-}
+import type {
+  CoinDetailsType,
+  CoinDetailsResponse,
+  UseCoinDetailsProps,
+  UseCoinDetailsReturn,
+} from "../types";
 
 export function useCoinDetails({
   symbol,

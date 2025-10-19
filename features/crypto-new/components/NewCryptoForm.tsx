@@ -1,16 +1,11 @@
 "use client";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Card } from "@/shared";
-import { useCryptoNew } from "../hooks";
-import { NewCryptoFormSchema, NewCryptoFormData } from "../types";
-import { useState } from "react";
+import { Button, Card, NewCryptoFormSchema } from "@/shared";
 import BackButton from "@/shared/components/BackButton";
-
-interface NewCryptoFormProps {
-  onSuccess?: (data: any) => void;
-  onCancel?: () => void;
-}
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useCryptoNew } from "../hooks";
+import type { NewCryptoFormData, NewCryptoFormProps } from "../types";
 
 const NewCryptoForm = ({ onSuccess, onCancel }: NewCryptoFormProps) => {
   const { createCrypto, loading, error } = useCryptoNew();

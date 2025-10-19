@@ -1,3 +1,5 @@
+import { NewCryptoFormData } from "@/shared";
+
 // Re-export the shared schema and types
 export { NewCryptoFormSchema, type NewCryptoFormData } from "@/shared/schemas";
 
@@ -28,4 +30,15 @@ export interface NewCryptoData {
   twitter?: string;
   github?: string;
   createdAt: string;
+}
+
+export interface NewCryptoFormProps {
+  onSuccess?: (data: any) => void;
+  onCancel?: () => void;
+}
+
+export interface UseCryptoNewReturn {
+  createCrypto: (data: NewCryptoFormData) => Promise<NewCryptoResponse>;
+  loading: boolean;
+  error: string | null;
 }

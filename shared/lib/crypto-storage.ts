@@ -1,24 +1,6 @@
 // Simple in-memory storage for custom cryptos
 // In a real application, this would be replaced with a database
-
-interface StoredCrypto {
-  id: string;
-  symbol: string;
-  name: string;
-  image: string;
-  currentPrice: string;
-  marketCap: string;
-  totalVolume: string;
-  priceChangePercentage24h: string;
-  marketCapRank: number;
-  lastUpdated: string;
-  isCustom: boolean;
-  description?: string;
-  website?: string;
-  twitter?: string;
-  github?: string;
-  createdAt: string;
-}
+import { StoredCrypto } from "../types";
 
 class CryptoStorage {
   private static instance: CryptoStorage;

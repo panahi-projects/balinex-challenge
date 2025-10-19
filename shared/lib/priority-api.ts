@@ -1,19 +1,4 @@
-import { CryptoCurrency } from "./scraper";
-
-interface CryptoMarketParams {
-  vs_currency: string;
-  order?: string;
-  per_page?: number;
-  page?: number;
-  [key: string]: string | number | boolean | undefined;
-}
-
-interface APIEndpoint {
-  name: string;
-  priority: number;
-  handler: (params: CryptoMarketParams) => Promise<CryptoCurrency[]>;
-  timeout?: number;
-}
+import type { APIEndpoint, CryptoCurrency, CryptoMarketParams } from "../types";
 
 export class CryptoPriorityAPI {
   private endpoints: APIEndpoint[];

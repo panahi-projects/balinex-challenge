@@ -1,22 +1,15 @@
 import { NormalizerFactory } from "@/features/crypto-list/normalizers";
 import {
-  CoinGeckoCryptoData,
-  ScrapedCryptoData,
-} from "@/features/crypto-list/types";
-import {
   BaseAPI,
   CryptoCurrency,
   CryptoPriorityAPI,
   scrapeCryptoData,
 } from "@/shared";
-
-interface CryptoMarketParams {
-  vs_currency: string;
-  order?: string;
-  per_page?: number;
-  page?: number;
-  [key: string]: string | number | boolean | undefined;
-}
+import type {
+  CoinGeckoCryptoData,
+  CryptoMarketParams,
+  ScrapedCryptoData,
+} from "../types";
 
 const cryptoPriorityAPI = new CryptoPriorityAPI();
 
