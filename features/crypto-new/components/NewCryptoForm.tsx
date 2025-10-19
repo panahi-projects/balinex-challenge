@@ -66,7 +66,7 @@ const NewCryptoForm = ({ onSuccess, onCancel }: NewCryptoFormProps) => {
               htmlFor="name"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              نام *
+              نام <span className="text-red-500">*</span>
             </label>
             <input
               {...register("name")}
@@ -86,7 +86,7 @@ const NewCryptoForm = ({ onSuccess, onCancel }: NewCryptoFormProps) => {
               htmlFor="symbol"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              نماد *
+              نماد <span className="text-red-500">*</span>
             </label>
             <input
               {...register("symbol")}
@@ -108,7 +108,7 @@ const NewCryptoForm = ({ onSuccess, onCancel }: NewCryptoFormProps) => {
               htmlFor="image"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              آدرس تصویر *
+              آدرس تصویر
             </label>
           </div>
 
@@ -118,7 +118,7 @@ const NewCryptoForm = ({ onSuccess, onCancel }: NewCryptoFormProps) => {
               htmlFor="description"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              توضیحات *
+              توضیحات
             </label>
             <textarea
               {...register("description")}
@@ -140,7 +140,7 @@ const NewCryptoForm = ({ onSuccess, onCancel }: NewCryptoFormProps) => {
               htmlFor="website"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              وبسایت *
+              وبسایت
             </label>
             <input
               {...register("website")}
@@ -162,7 +162,7 @@ const NewCryptoForm = ({ onSuccess, onCancel }: NewCryptoFormProps) => {
               htmlFor="twitter"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              توییتر *
+              توییت
             </label>
             <input
               {...register("twitter")}
@@ -184,7 +184,7 @@ const NewCryptoForm = ({ onSuccess, onCancel }: NewCryptoFormProps) => {
               htmlFor="github"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              گیت‌هاب *
+              گیت‌هاب
             </label>
             <input
               {...register("github")}

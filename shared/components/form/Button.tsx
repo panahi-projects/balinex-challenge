@@ -21,14 +21,14 @@ const Button = ({
 }: ButtonProps) => {
   const variantClass =
     variant === "primary"
-      ? "bg-primary-500 text-white"
+      ? "bg-primary-500 text-white hover:bg-primary-600"
       : variant === "secondary"
-        ? "bg-secondary-800 text-white"
+        ? "bg-secondary-800 text-white hover:bg-secondary-900"
         : variant === "info"
-          ? "bg-secondary-text-200 text-white"
+          ? "bg-secondary-text-200 text-white hover:bg-secondary-text-300"
           : variant === "success"
-            ? "bg-success-500 text-white"
-            : "bg-error-800 text-white";
+            ? "bg-success-500 text-white hover:bg-success-600"
+            : "bg-error-800 text-white hover:bg-error-900";
   const sizeClass =
     size === "small" ? "text-sm" : size === "medium" ? "text-base" : "text-lg";
   const outlineClass = outline

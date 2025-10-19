@@ -33,10 +33,10 @@ const ViewMoreButton = ({
         size="small"
       >
         {isLoading ? (
-          <>
+          <div className="flex items-center justify-center gap-2">
             <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-            در حال بارگذاری...
-          </>
+            <span>در حال بارگذاری...</span>
+          </div>
         ) : (
           <>
             مشاهده بیشتر
