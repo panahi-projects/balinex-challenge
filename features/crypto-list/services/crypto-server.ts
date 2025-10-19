@@ -1,17 +1,36 @@
-import { NextResponse } from "next/server";
-import { cryptoPriorityAPI } from "@/features/crypto-list";
+import { cryptoPriorityAPI } from "./crypto-priority-instance";
 import { getValidCoinLogoAsync } from "@/shared/lib/coin-logo";
 import { cryptoStorage } from "@/shared/lib/crypto-storage";
+import { CryptoCurrency } from "@/shared";
 
-export async function GET(req: Request) {
+interface CryptoServerParams {
+  vs_currency?: string;
+  order?: string;
+  per_page?: number;
+  page?: number;
+}
+
+interface CryptoServerResponse {
+  data: CryptoCurrency[];
+  source: string;
+  customCount: number;
+  timestamp: number;
+  success: boolean;
+  error?: string;
+}
+
+export async function fetchCryptoDataServer({
+  vs_currency = "usd",
+  order = "market_cap_desc",
+  per_page = 20,
+  page = 1,
+}: CryptoServerParams = {}): Promise<CryptoServerResponse> {
   try {
-    const { searchParams } = new URL(req.url);
-
     const params = {
-      vs_currency: searchParams.get("vs_currency") || "usd",
-      order: searchParams.get("order") || "market_cap_desc",
-      per_page: Number(searchParams.get("per_page")) || 100,
-      page: Number(searchParams.get("page")) || 1,
+      vs_currency,
+      order,
+      per_page,
+      page,
     };
 
     const result = await cryptoPriorityAPI.fetchCryptoData(params);
@@ -46,36 +65,29 @@ export async function GET(req: Request) {
 
     const allData = [...transformedCustomCryptos, ...dataWithValidatedLogos];
 
-    const response = NextResponse.json({
+    return {
       success: true,
       data: allData,
       source: result.source,
       customCount: customCryptos.length,
       timestamp: result.timestamp,
-    });
-
-    // Add caching headers
-    response.headers.set(
-      "Cache-Control",
-      "public, s-maxage=60, stale-while-revalidate=300"
-    );
-    response.headers.set("CDN-Cache-Control", "max-age=60");
-    response.headers.set("Vercel-CDN-Cache-Control", "max-age=60");
-
-    // Add revalidation tag for cache invalidation
-    response.headers.set("Cache-Tags", "crypto-data");
-
-    return response;
+    };
   } catch (error: unknown) {
-    console.error("All crypto data sources failed:", error);
+    console.error("Server-side crypto data fetch failed:", error);
 
-    return NextResponse.json(
-      {
-        success: false,
-        error: "All data sources are currently unavailable",
-        details: error instanceof Error ? error.message : "Unknown error",
-      },
-      { status: 503 }
-    );
+    return {
+      success: false,
+      data: [],
+      source: "error",
+      customCount: 0,
+      timestamp: Date.now(),
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
   }
 }
+
+// Cache configuration for ISR
+export const cryptoCacheConfig = {
+  revalidate: 60, // Revalidate every 60 seconds
+  tags: ["crypto-data"],
+} as const;

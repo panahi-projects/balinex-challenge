@@ -25,19 +25,29 @@ export class CoinDetailsAPI {
         vs_currency: vsCurrency,
       });
 
-      const response = await fetch(
+      // Construct absolute URL for server-side compatibility
+      const baseUrl =
+        typeof window !== "undefined"
+          ? window.location.origin
+          : process.env.NEXT_PUBLIC_BASE_URL || process.env.VERCEL_URL
+            ? `https://${process.env.VERCEL_URL}`
+            : "http://localhost:3000";
+
+      const url = new URL(
         `${this.baseUrl}/${symbol}?${queryParams.toString()}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          // We can add cache control for better performance
-          next: {
-            revalidate: 300, // Cache for 5 minutes
-          },
-        }
+        baseUrl
       );
+
+      const response = await fetch(url.toString(), {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        // We can add cache control for better performance
+        next: {
+          revalidate: 300, // Cache for 5 minutes
+        },
+      });
 
       const data = await response.json();
 

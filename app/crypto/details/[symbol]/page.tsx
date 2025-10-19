@@ -1,18 +1,46 @@
-import { CoinDetails } from "@/features";
+import {
+  CoinDetails,
+  fetchCryptoDetailsServer,
+  cryptoDetailsCacheConfig,
+} from "@/features/crypto-details";
 import { Card } from "@/shared";
 import BackButton from "@/shared/components/BackButton";
+import { Suspense } from "react";
 
-const CryptoDetailsPage = ({ params }: { params: { symbol: string } }) => {
+export const revalidate = cryptoDetailsCacheConfig.revalidate;
+
+const CryptoDetailsPage = async ({
+  params,
+}: {
+  params: { symbol: string };
+}) => {
   const { symbol } = params;
+
+  // Fetch initial data server-side
+  const initialData = await fetchCryptoDetailsServer({
+    symbol,
+    vsCurrency: "usd",
+  });
+
   return (
     <div className="container mx-auto my-4">
       <Card className="relative">
         <div className="absolute top-0 left-0">
           <BackButton />
         </div>
-        <CoinDetails symbol={symbol} />
+        <Suspense
+          fallback={
+            <div className="flex justify-center items-center py-8">
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+              <span className="mr-2">در حال دریافت اطلاعات...</span>
+            </div>
+          }
+        >
+          <CoinDetails symbol={symbol} initialData={initialData} />
+        </Suspense>
       </Card>
     </div>
   );
 };
+
 export default CryptoDetailsPage;
