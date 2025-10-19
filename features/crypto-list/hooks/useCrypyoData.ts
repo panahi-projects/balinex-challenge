@@ -1,4 +1,3 @@
-// hooks/useCryptoData.ts
 import { CryptoCurrency } from "@/shared";
 import { useState, useEffect, useCallback, useRef } from "react";
 
@@ -203,53 +202,37 @@ export function useCryptoData({
     }
 
     try {
-      // Fetch all pages in parallel
-      const pagePromises = [];
-      for (let page = 1; page <= totalLoadedPages; page++) {
-        const queryParams = new URLSearchParams({
-          vs_currency,
-          order,
-          per_page: per_page.toString(),
-          page: page.toString(),
-        });
+      // Optimize: Instead of making multiple API calls for each page,
+      // fetch all data in a single request with increased per_page
+      // e.g., if user loaded 3 pages of 20 items each, fetch 60 items from page 1
+      const totalItemsNeeded = totalLoadedPages * per_page;
+      const queryParams = new URLSearchParams({
+        vs_currency,
+        order,
+        per_page: totalItemsNeeded.toString(),
+        page: "1", // Always fetch from page 1 when getting all data
+      });
 
-        pagePromises.push(
-          fetch(`/api/crypto?${queryParams.toString()}`).then((response) => {
-            if (!response.ok) {
-              throw new Error(`API responded with status: ${response.status}`);
-            }
-            return response.json();
-          })
-        );
+      const response = await fetch(`/api/crypto?${queryParams.toString()}`);
+
+      if (!response.ok) {
+        throw new Error(`API responded with status: ${response.status}`);
       }
 
-      const results = await Promise.all(pagePromises);
+      const result = await response.json();
 
-      // Combine all data from all pages
-      const allData = [];
-      for (const result of results) {
-        if (result.success && result.data) {
-          allData.push(...result.data);
-        }
-      }
-
-      if (allData.length > 0) {
+      if (result.success && result.data) {
         // Update the data with all pages
-        setData(allData);
-        dataRef.current = allData;
-        setTotalLoaded(allData.length);
-
-        // Update source and timestamp from the first successful result
-        const firstSuccessResult = results.find((r) => r.success);
-        if (firstSuccessResult) {
-          setSource(firstSuccessResult.source);
-          setLastUpdated(firstSuccessResult.timestamp);
-        }
+        setData(result.data);
+        dataRef.current = result.data;
+        setTotalLoaded(result.data.length);
+        setSource(result.source);
+        setLastUpdated(result.timestamp);
       }
     } catch (error) {
       console.error("Failed to refresh all loaded pages:", error);
     }
-  }, [vs_currency, order, per_page, fetchData]);
+  }, [vs_currency, order, per_page]);
 
   useEffect(() => {
     // Only fetch if we don't have initial data or if initial data failed
